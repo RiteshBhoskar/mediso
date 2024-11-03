@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import argon2 from "argon2";
 import { z } from "zod";
+import jwt from "jsonwebtoken";
 import prisma from "@/lib/prisma";
 
 const signupSchema = z.object({
@@ -70,6 +71,9 @@ export async function POST(req: NextRequest){
                 }
             })
         }
+        const token = await jwt.sign({ id : user.id, email : user.email, role: user.role}, process.env.JWT_SECRET as string, {
+            expiresIn: "365d"
+        })
         // console.log("user created")
         if(user){
             return NextResponse.json(
@@ -81,7 +85,8 @@ export async function POST(req: NextRequest){
                         name: user.name,
                         role: user.role,
                         email: user.email,
-                    }
+                    },
+                    token
                 }, 
                 { status: 201 }
             );

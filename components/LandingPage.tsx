@@ -4,10 +4,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { FileText, UserPlus, Stethoscope, Users, MessageSquare, CheckCircle, Target, Zap, UserCircle, Lock, Calendar, HeartPulse } from "lucide-react"
 import Image from "next/image"
+import Header from "./Header"
 
 export default function IntroductionPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white font-body">
+      <Header />
       <main className="flex-1">
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-blue-50">
           <div className="container px-4 md:px-6">
@@ -206,13 +208,13 @@ export default function IntroductionPage() {
               </div>
               <div className="w-full max-w-sm space-y-2">
                 <Button asChild size="lg" className="w-full bg-white text-blue-600 hover:bg-blue-50 font-heading">
-                  <Link href="/signin">
+                  <Link href="/signup">
                     Create Your Free Account
                   </Link>
                 </Button>
                 <p className="text-sm text-blue-100">
                   Already have an account?{" "}
-                  <Link href="/signup" className="underline underline-offset-2 hover:text-white">
+                  <Link href="/signin" className="underline underline-offset-2 hover:text-white">
                     Sign in here
                   </Link>
                 </p>

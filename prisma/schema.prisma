@@ -53,7 +53,65 @@ model Availability {
   endTime   DateTime
 }
 
+model Concerns {
+  id Int @id @default(autoincrement())
+}
+
+// model Attachment {
+//   id        Int    @id @default(autoincrement())
+//   file      
+// }
+
 enum Role {
   PATIENT
   DOCTOR
+}
+
+// model Concern {
+//   id          Int       @id @default(autoincrement())
+//   title       String
+//   description String
+//   status      Status     @default(OPEN) // Enum to track the state of the concern
+//   priority    Priority   @default(MEDIUM) // Enum for urgency of the concern
+//   patient     User       @relation(fields: [patientId], references: [id])
+//   patientId   Int
+//   doctor      User?      @relation(fields: [doctorId], references: [id])
+//   doctorId    Int?
+//   createdAt   DateTime   @default(now()) // Automatically set when the concern is created
+//   updatedAt   DateTime   @updatedAt      // Automatically updated when concern is modified
+//   tags        String[]   // Array of strings to store tags/categories
+//   responses   Response[] // One-to-many relationship with responses from doctors
+// }
+
+enum Specialty {
+  ALLERGY_IMMUNOLOGY
+  ANESTHESIOLOGY
+  CARDIOLOGY
+  DERMATOLOGY
+  ENDOCRINOLOGY
+  GASTROENTEROLOGY
+  GENERAL_MEDICINE
+  GERIATRICS
+  HEMATOLOGY
+  INFECTIOUS_DISEASE
+  INTERNAL_MEDICINE
+  NEPHROLOGY
+  NEUROLOGY
+  OBSTETRICS_GYNECOLOGY
+  ONCOLOGY
+  OPHTHALMOLOGY
+  ORTHOPEDICS
+  OTOLARYNGOLOGY
+  PEDIATRICS
+  PSYCHIATRY
+  PULMONOLOGY
+  RADIOLOGY
+  RHEUMATOLOGY
+  SURGERY_GENERAL
+  SURGERY_CARDIOTHORACIC
+  SURGERY_NEUROSURGERY
+  SURGERY_ORTHOPEDIC
+  SURGERY_PLASTIC
+  SURGERY_VASCULAR
+  UROLOGY
 }

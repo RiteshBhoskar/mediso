@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
+import { Toaster } from "sonner";
 import { Providers } from "./providers";
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
 
 export const metadata: Metadata = {
   title: "Mediso",
@@ -19,8 +18,8 @@ export default function RootLayout({
     <html lang="en">
       <body
       >
-        <Header />
         <Providers>
+        <Toaster position="bottom-right" richColors/>
         {children}
         </Providers>
         <Footer />
