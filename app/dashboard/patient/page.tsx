@@ -1,4 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import DashboardData from "@/components/Charts";
+import PatientSidebar from "@/components/PatientSidebar";
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation";
 
@@ -10,7 +12,9 @@ export default async function Page(){
 
     return (
         <div>
-            <h1>Welcome, {session.user.name}</h1>
+            <>
+            <PatientSidebar  Component={DashboardData}/>
+            </>
         </div>
     )
 }

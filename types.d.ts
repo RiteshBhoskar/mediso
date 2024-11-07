@@ -11,11 +11,7 @@ declare module "next-auth" {
     user: User;
   }
 }
-declare module 'sonner' {
-  export const Toaster: React.FC<{ position?: string; richColors?: boolean }>;
-  export const toast: {
-    success: (message: string) => void;
-    error: (message: string) => void;
-    // Add more methods if 'sonner' has them
-  };
+// declarations.d.ts
+declare module '@/hooks/useAction' {
+  export const useAction: () => any; 
 }

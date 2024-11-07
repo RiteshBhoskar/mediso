@@ -1,16 +1,12 @@
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Stethoscope, Github, Mail } from "lucide-react"
-import { signIn } from "next-auth/react"
-import { useState } from "react"
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import SigninForm from "./SigninForm"
+import PlainHeader from "./PlainHeader"
 
 export default function SignIn() {
   return (
     <div className="flex flex-col min-h-screen bg-blue-50 font-body">
+      <PlainHeader />
       <main className="flex-1 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1">

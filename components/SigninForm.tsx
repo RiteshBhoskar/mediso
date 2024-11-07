@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "./ui/button";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function SigninForm(){
     
@@ -15,21 +16,23 @@ export default function SigninForm(){
 
     const handleSubmit = async (e: React.FormEvent)=>{
         e.preventDefault();
+        const signInLoadingId = toast.loading("Signing in...");
         const res = await signIn("credentials",{
             email,
             password,
             redirect: false,
         })
+        toast.dismiss(signInLoadingId);
+        toast.success("Signed In");
         if(res?.ok){
           const session = await getSession();
           const role = session?.user.role;
-          console.log(role);
           if(role === "PATIENT"){
             router.push("dashboard/patient")
           }else if(role === "DOCTOR"){
             router.push("dashboard/doctor")
           }else {
-            console.log("Something went wrong , please try again.", role)
+            toast.error("Something went wrong , please try again.")
           }
         }
     }

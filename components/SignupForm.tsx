@@ -7,8 +7,10 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Checkbox } from "@/components/ui/checkbox"
+import { toast } from "sonner"
 import { ExternalLink } from 'lucide-react'
 import { signIn, useSession } from "next-auth/react"
+import Link from "next/link"
 
 export default function SignupForm() {
   const [name, setName] = useState("");
@@ -18,7 +20,6 @@ export default function SignupForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [agreedToTerms, setAgreedToTerms] = useState(false);
-  const [message, setMessage ] = useState<{ text : string , success: boolean } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { data: session } = useSession();
   const router = useRouter()
@@ -35,19 +36,52 @@ export default function SignupForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessage(null);
+
+    if (!name.trim()) {
+      toast.warning("Full Name is required.");
+      return;
+    }
+    if (!email.trim()) {
+      toast.warning("Email is required.");
+      return;
+    }
+    if (!password) {
+      toast.warning("Password is required.");
+      return;
+    }
+    if (role === "doctor" && !speciality.trim()) {
+      toast.warning("Speciality is required for doctors.");
+      return;
+    }
+    if (!confirmPassword) {
+      toast.warning("Please confirm your password.");
+      return;
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.warning("Please enter a valid email address.");
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.warning("Password must be at least 6 characters long.");
+      return;
+    }
+
     if (password !== confirmPassword) {
-      setMessage({ text: "Passwords do not match" , success: false})
+      toast.warning("Passwords do not match")
       return
     }
     if (!agreedToTerms) {
-      setMessage({text :"You must agree to the terms", success: false})
+      toast.warning("You must agree to the terms")
       return
     }
 
     setIsSubmitting(true);
 
-    const res = await fetch("/api/auth/signup", {
+    const signupLoadingId = toast.loading("Signing Up...")
+    const res = await fetch("/api/signup", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
@@ -55,9 +89,16 @@ export default function SignupForm() {
       body: JSON.stringify({ name, role: role.toUpperCase() , email, password , speciality }),
     })
 
+    toast.dismiss(signupLoadingId)
+
+    if(!res.ok){
+      toast.error("Failed to sign up, please try again.");
+      setIsSubmitting(false)
+      return
+    }
+
     const data = await res.json()
-    setMessage({text : data.msg , success : true})
-    // console.log(data)
+    toast.success(data.msg);
     if(data.success){
 
       setName("");
@@ -68,25 +109,30 @@ export default function SignupForm() {
       setConfirmPassword("");
       setAgreedToTerms(false);
 
+      const loadingToastId = toast.loading("Signing In...");
+
       const signInResponse = await signIn("credentials",{
         email,
         password,
         redirect: false,
       })
 
+      toast.dismiss(loadingToastId)
+
       if(signInResponse?.error){
-        setMessage({text : signInResponse.error, success: false})
+        toast.error(signInResponse.error)
+      } else {
+        toast.success("Signed In Successfully.")
       }
 
     } else {
-      setMessage(data.error || "Failed to sign up, something went wrong please try again.")
+      toast.error(data.error || "Failed to sign up, something went wrong please try again.")
     }
-    setIsSubmitting(false);
+    setIsSubmitting(false)
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 p-6 bg-white rounded-lg shadow">
-    {message && <p className={message.success ? "text-green-400": "text-red-500" }>{message.text}</p>}
       <div className="space-y-2">
         <Label htmlFor="name">Full Name</Label>
         <Input
@@ -163,13 +209,13 @@ export default function SignupForm() {
         />
         <Label htmlFor="terms" className="text-sm">
           I agree to the{" "}
-          <a className="underline inline-flex items-center">
+          <Link href="/terms" className="underline inline-flex items-center">
             Terms of Service <ExternalLink className="w-3 h-3 ml-1" />
-          </a>{" "}
+          </Link>{" "}
           and{" "}
-          <a className="underline inline-flex items-center">
+          <Link href="/policy"className="underline inline-flex items-center">
             Privacy Policy <ExternalLink className="w-3 h-3 ml-1" />
-          </a>
+          </Link>
         </Label>
       </div>
       <Button

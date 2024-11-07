@@ -74,7 +74,6 @@ export async function POST(req: NextRequest){
         const token = await jwt.sign({ id : user.id, email : user.email, role: user.role}, process.env.JWT_SECRET as string, {
             expiresIn: "365d"
         })
-        // console.log("user created")
         if(user){
             return NextResponse.json(
                 {
