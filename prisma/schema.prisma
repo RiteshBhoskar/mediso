@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  password  String
+  name      String
+  role      Role
+  doctor    Doctor?
+  patient   Patient?
+  concern   Concerns[]
+  vote      Vote[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Doctor {
+  id           Int           @id @default(autoincrement())
+  speciality   String
+  appointments Appointment[]
+  user         User          @relation(fields: [userId], references: [id])
+  userId       Int           @unique
+}
+
+model Patient {
+  id           Int           @id @default(autoincrement())
+  appointments Appointment[]
+  user         User          @relation(fields: [userId], references: [id])
+  userId       Int           @unique
+}
+
+model Appointment {
+  id              Int      @id @default(autoincrement())
+  doctor          Doctor   @relation(fields: [doctorId], references: [id])
+  doctorId        Int
+  patient         Patient  @relation(fields: [patientId], references: [id])
+  patientId       Int
+  doctorName      String
+  concernId       Int
+  concern         Concerns @relation(fields: [concernId], references: [id])
+  concernTitle    String
+  appointmentDate DateTime
+  startTime       DateTime
+  endTime         DateTime
+  createdAt       DateTime @default(now())
+}
+
+model Concerns {
+  id           Int           @id @default(autoincrement())
+  title        String
+  description  String
+  user         User          @relation(fields: [userId], references: [id])
+  userId       Int
+  vote         Vote[]
+  upVotes      Int           @default(0)
+  downVotes    Int           @default(0)
+  speciality   Speciality
+  createdAt    DateTime      @default(now())
+  appointments Appointment[]
+}
+
+model Vote {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  concern   Concerns @relation(fields: [concernId], references: [id])
+  concernId Int
+  type      VoteType
+  createdAt DateTime @default(now())
+
+  @@unique([userId, concernId])
+}
+
+enum Role {
+  PATIENT
+  DOCTOR
+}
+
+enum VoteType {
+  UPVOTE
+  DOWNVOTE
+}
+
+enum Speciality {
+  ALLERGY_IMMUNOLOGY
+  ANESTHESIOLOGY
+  CARDIOLOGY
+  DERMATOLOGY
+  ENDOCRINOLOGY
+  GASTROENTEROLOGY
+  GENERAL_MEDICINE
+  GERIATRICS
+  HEMATOLOGY
+  INFECTIOUS_DISEASE
+  INTERNAL_MEDICINE
+  NEPHROLOGY
+  NEUROLOGY
+  OBSTETRICS_GYNECOLOGY
+  ONCOLOGY
+  OPHTHALMOLOGY
+  ORTHOPEDICS
+  OTOLARYNGOLOGY
+  PEDIATRICS
+  PSYCHIATRY
+  PULMONOLOGY
+  RADIOLOGY
+  RHEUMATOLOGY
+  SURGERY_GENERAL
+  SURGERY_CARDIOTHORACIC
+  SURGERY_NEUROSURGERY
+  SURGERY_ORTHOPEDIC
+  SURGERY_PLASTIC
+  SURGERY_VASCULAR
+  UROLOGY
+}
