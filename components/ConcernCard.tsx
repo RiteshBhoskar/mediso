@@ -77,7 +77,7 @@ const ConcernCard: React.FC<Concern & { userId: number }> = ({
   const formattedTime = dayjs(createdAt).format('HH:mm');
 
   return (
-    <div className="w-[420px] bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-200 mb-4 font-satoshi">
+    <div className="w-[420px] bg-white shadow-lg rounded-2xl overflow-hidden border transition-transform transform hover:scale-105 border-gray-200 mb-4 font-satoshi">
       <div className="p-4 border-b flex justify-between border-gray-100">
         <div className='grid'>
           <h2 className="text-2xl font-semibold text-black mb-2">{title}</h2>

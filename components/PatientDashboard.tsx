@@ -50,6 +50,11 @@ export default function DashboardData() {
               Tell us your Concerns
             </Button>
         </Link>
+        <Link href="/dashboard/patient/appointments">
+            <Button variant="outline">
+              View Your Appointments
+            </Button>
+        </Link>
         {/* <Select value={timeRange} onValueChange={setTimeRange}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select time range" />
