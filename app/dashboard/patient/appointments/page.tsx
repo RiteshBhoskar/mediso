@@ -12,6 +12,7 @@ export default async function () {
 
     if(!session || session.user.role !== "PATIENT") {
         redirect("/");
+        return null;
     }
 
     return (

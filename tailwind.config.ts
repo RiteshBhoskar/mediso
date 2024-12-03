@@ -9,6 +9,15 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+		keyframes: {
+			"shine": {
+			  from: { backgroundPosition: '200% 0' },
+			  to: { backgroundPosition: '-200% 0' },
+			},
+		  },
+		  animation: {
+			"shine": "shine 8s ease-in-out infinite",
+		  },
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -73,7 +82,9 @@ const config: Config = {
   	fontWeight: {
   		light: '300',
   		regular: '400',
+		mid: '450',
   		medium: '500',
+		semibold: '600',
   		bold: '700'
   	}
   },

@@ -13,27 +13,48 @@ export default function SigninForm(){
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [signingIn , setSigningIn] =  useState<boolean>(false);
+    const [rememberMe, setRememberMe] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent)=>{
         e.preventDefault();
         const signInLoadingId = toast.loading("Signing in...");
+        setSigningIn(true);
+
+        try {
         const res = await signIn("credentials",{
             email,
             password,
             redirect: false,
         })
         toast.dismiss(signInLoadingId);
-        toast.success("Signed In");
+        if(!res) {
+          toast.error("Unexpected error occurred. Please try again.");
+          setSigningIn(false);
+          return;
+        }
+        if(res?.error){
+          toast.error(res.error);
+        }
         if(res?.ok){
+          toast.success("Signed In");
           const session = await getSession();
           const role = session?.user.role;
           if(role === "PATIENT"){
-            router.push("dashboard/patient")
+            router.push("dashboard/patient");
+            setSigningIn(false)
           }else if(role === "DOCTOR"){
-            router.push("dashboard/doctor")
+            router.push("dashboard/doctor");
+            setSigningIn(false)
           }else {
-            toast.error("Something went wrong , please try again.")
+            toast.error("Something went wrong , please try again.");
+            setSigningIn(false);
           }
+        }
+        } catch (error) {
+          toast.error("Something went wrong , please try again.")
+        } finally {
+          setSigningIn(false);
         }
     }
 
@@ -60,12 +81,15 @@ export default function SigninForm(){
                 onChange={(e)=> setPassword(e.target.value)} />
             </div>
             <div className="flex items-center space-x-2 m-3">
-              <input type="checkbox" id="remember" className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+              <input type="checkbox" id="remember"
+              checked={rememberMe}
+              onChange={()=> setRememberMe(!rememberMe)}
+               className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
               <label htmlFor="remember" className="text-sm text-gray-600">Remember me</label>
             </div>
             <div className="m-3">
-            <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-heading" type="submit">
-              Sign in
+            <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-heading" type="submit" disabled={signingIn || !email || !password} >
+              {signingIn ? "Signing In ..." : "Sign in"}
             </Button>
             </div>
             <div className="relative m-3">

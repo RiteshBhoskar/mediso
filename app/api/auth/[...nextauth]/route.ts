@@ -2,7 +2,6 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "@/lib/prisma";
 import argon2 from "argon2";
-import { NextResponse } from "next/server";
 
 
 export const authOptions: NextAuthOptions = {
@@ -13,16 +12,26 @@ export const authOptions: NextAuthOptions = {
                     email : { label: "email" , type: "email", placeholder: "your@email.com"},
                     password : { label: "password" , type: "password", placeholder: "password"}
                 },
-                async authorize(credentials, req) {
-                    if(!credentials) return null;
+                async authorize(credentials) {
+                    if(!credentials) {
+                        throw new Error("Email and password is required.")
+                    };
 
                     const user = await prisma.user.findUnique(
                         {where: {email: credentials.email}}
                     );
-                    if(user && await argon2.verify(user.password, credentials.password)){
-                        return { id: user.id, name: user.name , email: user.email, role: user.role };
+
+                    if(!user){
+                        throw new Error ("No user found with this email.");
                     }
-                    return null;
+
+                    const isValidPassword = await argon2.verify(user.password , credentials.password);
+                    
+                    if(!isValidPassword){
+                        throw new Error ("Invalid password.");
+                    }
+                    
+                    return { id: user.id, name: user.name , email: user.email, role: user.role };
                 },
             })
         ],

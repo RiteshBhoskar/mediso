@@ -3,36 +3,16 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { FileText, UserPlus, Stethoscope, Users, MessageSquare, CheckCircle, Target, Zap, UserCircle, Lock, Calendar, HeartPulse } from "lucide-react"
-import Image from "next/image"
 import Header from "./Header"
+import HeroSection from "./HeroSection"
 
 export default function IntroductionPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-white font-body">
+    <div className="flex flex-col font-satoshi min-h-screen bg-white font-body">
       <Header />
       <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-blue-50">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h1 className="text-3xl font-satoshi 
-                font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none text-gray-900 font-heading">
-                  Welcome to HealthConnect
-                </h1>
-                <p className="mx-auto max-w-[700px] text-gray-700 md:text-xl">
-                  Share your health concerns and connect with doctors who specialize in your needs. A new approach to personalized healthcare.
-                </p>
-              </div>
-              <div className="space-x-4">
-                <Button asChild size="lg" className="bg-blue-600 text-white hover:bg-blue-700 font-heading">
-                  <Link href="/signup">Join Now</Link>
-                </Button>
-                <Button variant="outline" asChild size="lg" className="text-blue-600 border-blue-600 hover:bg-blue-50 font-heading">
-                  <Link href="#how-it-works">Learn More</Link>
-                </Button>
-              </div>
-            </div>
-          </div>
+        <section className="my-4">
+          <HeroSection />
         </section>
 
         <section id="how-it-works" className="w-full bg-slate-300 py-12 md:py-24 lg:py-32">

@@ -16,9 +16,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-      >
+    <html lang="en" className="scroll-smooth">
+      <body>
         <Providers>
         <Toaster position="bottom-right" richColors/>
         {children}
@@ -27,5 +26,5 @@ export default function RootLayout({
         <Analytics />
       </body>
     </html>
-  );
+  )
 }
