@@ -74,8 +74,10 @@ export default function ResponsiveHeader() {
 
       <div className="flex items-center">
         <Search className="w-5 h-5 text-gray-600 mr-4" />
-        <Button className="hidden sm:block bg-blue-900 hover:bg-blue-800 text-white rounded-full px-6">
+        <Button className="hidden sm:block bg-[#1C274C] hover:bg-[#324074] text-white rounded-full px-6">
+          <Link href="#get-started">
           Get Started
+          </Link>
         </Button>
       </div>
     </header>
