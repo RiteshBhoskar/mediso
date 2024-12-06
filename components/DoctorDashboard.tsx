@@ -61,17 +61,19 @@ export default function DoctorsDashboard() {
   return (
     <div className="p-8 bg-background text-foreground">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Doctor&apos;s Dashboard</h1>
-        <div>
-        <Link href="/dashboard/doctor/concerns">
-            <Button variant="outline">
-              Read patient's concerns
-            </Button>
-        </Link>
+        <div className="flex-col">
+        <h1 className="text-3xl font-regular">Doctor&apos;s Dashboard</h1>
+            <div className="flex gap-3 items-center text-sm mt-2">
+          <span>
+            Connected to the Hospital Servers
+            </span>
+            <div className="blinking-dot">
+            </div>
+          </div>
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="items-center hidden sm:flex">
           <Select value={selectedDate} onValueChange={setSelectedDate}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="sm:w-[180px]">
               <SelectValue placeholder="Select date" />
             </SelectTrigger>
             <SelectContent>
@@ -80,50 +82,77 @@ export default function DoctorsDashboard() {
               <SelectItem value="next-week">Next Week</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" size="icon">
-            <Bell className="h-4 w-4" />
-          </Button>
         </div>
       </div>
+      <div className="flex items-center my-4">
+      <Link href="/dashboard/doctor/concerns">
+        <Card className="hover:shadow-lg transition-shadow duration-300">
+          <CardHeader className="flex items-center gap-3">
+            <div className="p-3 rounded-full bg-blue-100 text-blue-600">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="h-6 w-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M8.25 9H6a2.25 2.25 0 00-2.25 2.25v7.5A2.25 2.25 0 006 21h12a2.25 2.25 0 002.25-2.25v-7.5A2.25 2.25 0 0018 9h-2.25M9.75 12V6m4.5 0v6M15 3.75H9M21 16.5v1.875a1.125 1.125 0 01-1.125 1.125H4.125A1.125 1.125 0 013 18.375V16.5"
+                />
+              </svg>
+            </div>
+            <CardTitle className="text-lg font-medium">Read Patient's Concerns</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">
+              Review health concerns shared by patients and provide guidance.
+            </p>
+          </CardContent>
+        </Card>
+      </Link>
+    </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Patients</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <Users className="h-4 w-4 text-blue-300" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1,234</div>
-            <p className="text-xs text-muted-foreground">+5 new this week</p>
+            <div className="text-2xl font-medium">1,234</div>
+            <p className="text-xs">+5 new this week</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Appointments Today</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <Calendar className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">8</div>
-            <p className="text-xs text-muted-foreground">2 slots available</p>
+            <div className="text-2xl font-medium">8</div>
+            <p className="text-xs">2 slots available</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Average Wait Time</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
+            <Clock className="h-4 w-4 text-yellow-300" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">18 min</div>
+            <div className="text-2xl font-medium">18 min</div>
             <p className="text-xs text-muted-foreground">-2 min from last week</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Patient Satisfaction</CardTitle>
-            <Activity className="h-4 w-4 text-muted-foreground" />
+            <Activity className="h-4 w-4 text-purple-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">98%</div>
+            <div className="text-2xl font-medium">98%</div>
             <p className="text-xs text-muted-foreground">Based on recent surveys</p>
           </CardContent>
         </Card>
@@ -169,7 +198,7 @@ export default function DoctorsDashboard() {
               <BarChart data={patientVisitsData}>
                 <XAxis dataKey="name" />
                 <YAxis />
-                <Bar dataKey="visits" fill="hsl(var(--primary))" />
+                <Bar dataKey="visits" fill="#2ebb8e" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>

@@ -133,16 +133,16 @@ export default  function ConcernCardDoctor(){
             }
       };
 
-    return (<div className="grid justify-center pt-3 bg-white rounded-2xl overflow-hidden font-satoshi">
+    return (<div className="grid justify-center pt-3 bg-white rounded-2xl overflow-hidden font-satoshi gap-4">
         {concerns.length > 0 ? (
           concerns.map((concern) => (
             <div
               key={concern.id}
-              className="sm:w-[420px] bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-200 mb-4 font-satoshi"
+              className="w-[420px] bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-200 mb-4 font-satoshi"
             >
               <div className="p-4 border-b flex justify-between border-gray-100">
                 <div className="grid">
-                  <h2 className="text-2xl font-semibold text-black mb-2">
+                  <h2 className="text-2xl font-medium text-black mb-2">
                     {concern.title}
                   </h2>
                   <p className="text-sm text-indigo-600 font-medium">
@@ -153,17 +153,17 @@ export default  function ConcernCardDoctor(){
                     <Dialog>
                         <DialogTrigger asChild>
                           <img 
-                            className="h-7 w-7"
+                            className="h-7 w-7 cursor-pointer"
                             src="/appointment.png" 
                             alt="appointment image" />
                         </DialogTrigger>
-                        <DialogContent className="sm:max-w-[420px] font-satoshi">
+                        <DialogContent className="w-fit sm:max-w-[420px] font-satoshi">
                             <DialogHeader>
                                 <DialogTitle className="font-regular text-2xl">
                                     Schedule appointment
                                 </DialogTitle>
                                 <DialogDescription className="">
-                                    Send an app appointment to {concern.patientName}
+                                    Send an appointment to {concern.patientName}
                                 </DialogDescription>
                             </DialogHeader>
                             <div>

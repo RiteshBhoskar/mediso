@@ -35,14 +35,14 @@ export default function ResponsiveHeader() {
       </Link>
 
       <button
-        className="sm:hidden flex items-center text-gray-600"
+        className="sm:hidden flex items-center ml-auto text-gray-600"
         onClick={() => setMenuOpen(!menuOpen)}
       >
         <Menu className="w-6 h-6" />
       </button>
 
       <nav
-        className={`absolute sm:static top-20 left-0 w-full sm:w-auto sm:flex sm:items-center sm:gap-2 bg-white sm:bg-transparent transition-all duration-300 ${
+        className={`absolute sm:static top-20 w-full sm:w-auto sm:flex sm:items-center sm:gap-2 bg-white sm:bg-transparent transition-all duration-300 ${
           menuOpen ? "block" : "hidden"
         }`}
       >
@@ -73,7 +73,7 @@ export default function ResponsiveHeader() {
       </nav>
 
       <div className="flex items-center">
-        <Search className="w-5 h-5 text-gray-600 mr-4" />
+        <Search className="hidden sm:block w-5 h-5 text-gray-600 mr-4" />
         <Button className="hidden sm:block bg-[#1C274C] hover:bg-[#324074] text-white rounded-full px-6">
           <Link href="#get-started">
           Get Started

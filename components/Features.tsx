@@ -11,7 +11,7 @@ export default function Features() {
                 Features
             </div>
             </div>
-            <h2 className="text-[3.30rem] pt-7 text-center font-satoshi px-60 pb-8 leading-tight text-[#363636] font-medium">Different types of features we have for your healthcare</h2>
+            <h2 className="text-[3.30rem] flex justify-center pt-7 text-center font-satoshi px-60 pb-8 leading-tight text-[#363636] font-medium">Different types of features we have for your healthcare</h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               <Card className="rounded-3xl">
                 <CardHeader>

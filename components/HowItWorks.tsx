@@ -7,13 +7,13 @@ import Link from "next/link";
 
 export default function HowItWorks() {
     return (
-        <div className="w-full bg-white py-10">
-          <div className="container px-4 md:px-6 w-full flex justify-between">
-            <div className="flex-col w-full pt-20">
+        <div className="w-fit bg-white pb-7 sm:py-10">
+          <div className="container px-4 md:px-6 w-full flex flex-col sm:flex-row justify-between">
+            <div className="flex flex-col items-center justify-center sm:items-start w-full pt-20 h-screen">
             <div className="text-[#1C274C] rounded-full px-6 bg-[#ebebfb] w-fit font-medium font-satoshi text-lg py-2 ml-3">
                 Our Vision
             </div>
-            <h2 className="text-[3.50rem] pt-7 pl-3 font-satoshi text-[#363636] font-medium tracking-tight leading-normal pr-20">Finding health solutions with top Experts</h2>
+            <h2 className="text-[3.50rem] pt-7 pl-3 font-satoshi text-[#363636] text-center sm:text-left font-medium tracking-tight leading-normal sm:pr-20">Finding health solutions with top Experts</h2>
             <Button className="bg-[#1C274C] hover:bg-[#324074] text-white rounded-full mt-7 ml-3 px-6 py-6 text-[20px]">
                     <Link href="#features">
                     About Us
@@ -21,7 +21,7 @@ export default function HowItWorks() {
                     </Button>
             </div>
 
-            <Tabs defaultValue="patients" className="w-full max-w-3xl mx-auto pr-5">
+            <Tabs defaultValue="patients" className="w-full max-w-3xl mx-auto sm:pr-5">
               <TabsList className="grid w-full grid-cols-2 rounded-full h-auto ">
                 <TabsTrigger value="patients" className="font-heading  rounded-full  text-xl">For Patients</TabsTrigger>
                 <TabsTrigger value="doctors" className="font-heading text-lg rounded-full">For Doctors</TabsTrigger>

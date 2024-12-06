@@ -6,14 +6,14 @@ import Link from "next/link";
 
 export default function HeroSection () {
     return (
-        <div className="h-auto w-full flex justify-between">
+        <div className="h-auto w-full sm:flex justify-between">
             <div className="w-full">
                 <div className="pt-16 pl-10 space-y-6 h-full">
                 <div className="flex items-center w-fit space-x-2">
                     <Star className="w-5 h-5 text-[#1C274C] fill-current" />
                     <span className="text-gray-600 text-xl w-fit">4.7 | 3,460 Reviews</span>
                 </div>
-                <h1 className="text-[3.50rem] font-satoshi text-[#363636] font-medium leading-tight">
+                <h1 className="text-[3rem] sm:text-[3.50rem] font-satoshi text-[#363636] font-medium leading-tight">
                     A modern <span className=" bg-blue-100 rounded-full p-1 size-14 inline-flex justify-center items-center top-2 text-black">
                        <MoveUpRight /> </span> safe and<br />
                     effective approach to<br />
@@ -40,8 +40,8 @@ export default function HeroSection () {
             </div>
 
 
-            <div className="w-full relative">
-                <div className="w-auto absolute mt-64">
+            <div className="w-full relative pt-5 sm:pt-0">
+                <div className="w-auto hidden sm:block absolute mt-64">
                     <Card className="z-50 rounded-3xl">
                         <CardHeader className="text-[0.95rem] -m-2 -mt-4  font-mid flex justify-center">
                             Available Doctors
@@ -87,7 +87,7 @@ export default function HeroSection () {
                 <img 
                   src="/doctorImage.avif"
                   alt="doctor image"
-                  className="h-[532px] px-20"
+                  className="sm:h-[532px] px-20"
                    />
             </div>
         </div>

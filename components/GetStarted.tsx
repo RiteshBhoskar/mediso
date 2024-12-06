@@ -10,10 +10,10 @@ export default function GetStarted() {
                         <div className="rounded-full text-[#1C274C] bg-[#ebebfb] px-6 py-2 w-fit mx-auto font-medium text-lg">
                             Get Started
                         </div>
-                        <h2 className="text-[3.5rem] font-satoshi font-medium tracking-tight leading-tight text-white">
+                        <h2 className="text-[2.5rem] sm:text-[3.5rem] font-satoshi font-medium tracking-tight leading-tight text-white">
                             Ready to Transform Your Healthcare Experience?
                         </h2>
-                        <p className="text-[#d9d9ff] text-lg">
+                        <p className="text-[#d9d9ff] text-lg px-2">
                             Join HealthConnect today and experience a new way of connecting patients with the right doctors. It's quick, easy, and free to get started.
                         </p>
                     </div>
