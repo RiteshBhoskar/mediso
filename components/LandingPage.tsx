@@ -1,5 +1,3 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import Header from "./Header"
 import HeroSection from "./HeroSection"
 import Stats from "./Stats"

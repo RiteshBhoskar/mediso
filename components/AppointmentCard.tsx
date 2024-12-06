@@ -70,7 +70,7 @@ export default function AppointmentCard () {
     return (
         <div className="space-y-6">
     {appointments.length === 0 ? (
-        <div className="text-2xl font-satoshi flex justify-center items-center text-center text-gray-600">
+        <div className="text-2xl font-satoshi flex justify-center items-center text-center text-gray-600 h-screen ">
             No appointments found.
         </div>
     ) : (

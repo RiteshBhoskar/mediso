@@ -18,7 +18,7 @@ import {
   Cell,
 } from "recharts"
 
-import { Activity, Droplet, Scale, Utensils, Weight } from "lucide-react"
+import { Activity, Calendar, Droplet, Scale, Users, Utensils, Weight } from "lucide-react"
 
 import {
   Card,
@@ -44,18 +44,17 @@ export default function DashboardData() {
   return (
     <div className="p-6 space-y-6 bg-background text-foreground">
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-satoshi  tracking-tight">Health Dashboard</h1>
-        <Link href="/dashboard/patient/create-concern">
-            <Button variant="outline">
-              Tell us your Concerns
-            </Button>
-        </Link>
-        <Link href="/dashboard/patient/appointments">
-            <Button variant="outline">
-              View Your Appointments
-            </Button>
-        </Link>
-        {/* <Select value={timeRange} onValueChange={setTimeRange}>
+      <div className="flex-col">
+      <h1 className="text-4xl font-satoshi  tracking-tight">Health Dashboard</h1>
+      <div className="flex gap-3 items-center text-sm mt-2">
+      <span>
+        Connected to your Apple watch
+        </span>
+        <div className="blinking-dot">
+        </div>
+      </div>
+      </div>
+        <Select value={timeRange} onValueChange={setTimeRange}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select time range" />
           </SelectTrigger>
@@ -64,7 +63,56 @@ export default function DashboardData() {
             <SelectItem value="30d">Last 30 days</SelectItem>
             <SelectItem value="90d">Last 90 days</SelectItem>
           </SelectContent>
-        </Select> */}
+        </Select>
+      </div>
+      <div className="mt-6 grid gap-4 md:grid-cols-3">
+          <Link href="/dashboard/patient/create-concern">
+            <Card className="hover:shadow-lg transition-shadow duration-300">
+              <CardHeader className="flex items-center gap-3">
+                <div className="p-3 rounded-full bg-red-100 text-red-600">
+                  <Activity className="h-6 w-6" />
+                </div>
+                <CardTitle className="text-lg font-medium">Tell us your Concerns</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Share your health concerns to receive personalized advice.
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/dashboard/patient/appointments">
+            <Card className="hover:shadow-lg transition-shadow duration-300">
+              <CardHeader className="flex items-center gap-3">
+                <div className="p-3 rounded-full bg-blue-100 text-blue-600">
+                  <Calendar className="h-6 w-6" />
+                </div>
+                <CardTitle className="text-lg font-medium">View Your Appointments</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Keep track of your upcoming and past medical appointments.
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/dashboard/patient/concerns">
+            <Card className="hover:shadow-lg transition-shadow duration-300">
+              <CardHeader className="flex items-center gap-3">
+                <div className="p-3 rounded-full bg-green-100 text-green-600">
+                  <Users className="h-6 w-6" />
+                </div>
+                <CardTitle className="text-lg font-medium">View Other Patients' Concerns</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Explore shared health concerns from other patients for insights.
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
       </div>
 
       <div className="grid gap-6 mt-6">

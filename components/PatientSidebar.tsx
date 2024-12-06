@@ -72,7 +72,8 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { useSession } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
+import { useState } from "react"
 
 const data = {
   navMain: [
@@ -219,6 +220,13 @@ interface ParentProps {
 export default function PatientSidebar({ Component } : ParentProps) {
 
   const {data: session , status } = useSession();
+  const [ isSigningOut, setIsSigningOut ]= useState(false);
+  async function handleSignout(){
+      if(isSigningOut) return;
+      setIsSigningOut(true);
+      await signOut({callbackUrl: "/"});
+      setIsSigningOut(false);
+  }
 
   return (
     <>
@@ -431,7 +439,9 @@ export default function PatientSidebar({ Component } : ParentProps) {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
                     <LogOut />
-                    Log out
+                    <button onClick={handleSignout}  disabled={isSigningOut}>
+                        {isSigningOut ? "Signing Out" : "Sign Out"}
+                    </button>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

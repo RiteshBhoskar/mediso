@@ -15,12 +15,12 @@ export default async function (){
 
   return (
     <>
-    <div className="flex justify-normal">
-      <Link href="/dashboard/patient" className="flex justify-center items-center ml-4">
-        <Button variant="default">
-          Back
-        </Button>
-      </Link>
+    <div className="flex-col sm:flex sm:justify-normal">
+    <Button variant="outline"  className="w-fit h-full ml-4 mt-4">
+           <Link href="/dashboard/patient">
+            Back
+            </Link>
+           </Button>
      <h1 className="text-3xl mt-4 mr-20 mb-4 flex w-full text-center justify-center items-center font-satoshi">Patients Concerns</h1>
      </div>
       <ConcernsPage />

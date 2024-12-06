@@ -29,7 +29,6 @@ export default function CreateConcern(){
   const [description , setDescription] = useState("");
   const [speciality, setSpeciality] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const router = useRouter();
 
   
   const handleSubmit = async (e: React.FormEvent)=>{
@@ -76,17 +75,16 @@ export default function CreateConcern(){
         setSpeciality(null);
         toast.success(data.message);
         setIsSubmitting(false);
-        router.push("/dashboard/patient");
     }
 
   };
 
   return (
-    <div className="flex justify-center my-3">
-    <Card className="w-[400px]">
+    <div className="flex justify-center h-fit mx-3 mt-7 mb-24">
+    <Card className="w-[400px] h-fit">
       <CardHeader>
         <CardTitle className="text-xl">Tell us your concern</CardTitle>
-        <CardDescription>Deploy your new project in one-click.</CardDescription>
+        <CardDescription>Write your concerns and a doctor will reach out to you soon.</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit}>
@@ -129,11 +127,8 @@ export default function CreateConcern(){
                placeholder="Describe your concern in detail" />
             </div>
           </div>
-          <CardFooter className="w-full flex justify-between pt-4 -mb-7">
-            <Button variant="outline" type="button" onClick={()=>router.push("/dashboard/patient")}>
-              Back
-            </Button>
-            <Button type="submit" disabled={isSubmitting}>
+          <CardFooter className="w-full pt-4 -mb-7">
+            <Button type="submit" className="w-full rounded-full" disabled={isSubmitting}>
                 {isSubmitting ? "Submitting..." : "Submit"}
             </Button>
           </CardFooter>

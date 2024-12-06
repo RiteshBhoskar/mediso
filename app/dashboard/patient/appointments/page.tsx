@@ -17,12 +17,12 @@ export default async function () {
 
     return (
         <>
-        <div className="flex">
-         <Link href="/dashboard/patient" className="h-full pl-4 pt-4">
-           <Button variant="default">
+        <div className="flex-col sm:flex">
+        <Button variant="outline"  className="w-fit h-full ml-4 mt-4">
+           <Link href="/dashboard/patient">
             Back
+            </Link>
            </Button>
-         </Link>
          <div className="grid justify-center items-center w-full">
             <h1 className="text-3xl  mt-4 mb-4 text-center justify-center items-center font-satoshi">Your Appointments</h1>
             <div className="w-full flex justify-center items-center">
