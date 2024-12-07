@@ -1,4 +1,4 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { authOptions } from "@/lib/auth";
 import ConcernCardDoctor from "@/components/ConcernCardDoc"
 import { Button } from "@/components/ui/button";
 import { getServerSession } from "next-auth"

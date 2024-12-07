@@ -1,4 +1,4 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 import DoctorsDashboard from "@/components/DoctorDashboard";
 import DoctorSidebar from "@/components/DoctorSidebar";
 import { getServerSession } from "next-auth"
