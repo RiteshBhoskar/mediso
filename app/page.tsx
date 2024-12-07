@@ -4,26 +4,22 @@ import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation";
 
 
-export default async function Home() {
+const getUserDetails = async () => {
+  const  session = await getServerSession(authOptions);
+  return session;
+}
 
-  const session = await getServerSession(authOptions);
-  console.log(session);
-  if (!session?.user) {
-    console.log("No session found, redirecting to login...");
-    redirect("/signin");
-  }
-  
+export default async function Home() {
+  const session = await getUserDetails();
+
   if(session?.user){
-    const destination = session.user.role === "PATIENT" ? "/dashboard/patient" : "/dashboard/doctor";
-    console.log("Redirecting to:", destination);
-    redirect(destination);
+    const destination = session.user.role === "PATIENT"? "/dashboard/patient" : "/dashboard/doctor"
+    redirect(destination)
   }
+
   return (
     <main>
-      {/* <IntroductionPage /> */}
-      <p>
-        hi there
-      </p>
+      <IntroductionPage />
     </main>
   )
 }
