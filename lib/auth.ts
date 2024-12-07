@@ -1,7 +1,7 @@
 
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "@/lib/prisma";
-import argon2 from "argon2";
+import bcrypt from "bcrypt";
 import type { NextAuthOptions } from "next-auth";
 
 
@@ -13,7 +13,7 @@ export const authOptions = {
                     email : { label: "email" , type: "email", placeholder: "your@email.com"},
                     password : { label: "password" , type: "password", placeholder: "password"}
                 },
-                async authorize(credentials:any) {
+                async authorize(credentials: Record<"email" | "password", string> | undefined) {
                     if(!credentials) {
                         throw new Error("Email and password is required.")
                     };
@@ -26,8 +26,8 @@ export const authOptions = {
                         throw new Error ("No user found with this email.");
                     }
 
-                    const isValidPassword = await argon2.verify(user.password , credentials.password);
-                    
+                    const isValidPassword = await bcrypt.compare(credentials.password, user.password)
+
                     if(!isValidPassword){
                         throw new Error ("Invalid password.");
                     }
@@ -35,7 +35,7 @@ export const authOptions = {
                     return { id: user.id, name: user.name , email: user.email, role: user.role };
                 },
             })
-        ],
+        ], 
         session: {
             maxAge: 30 * 24 * 60 * 60,
             updateAge: 24 * 60 * 60 

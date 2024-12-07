@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import argon2 from "argon2";
 import { z } from "zod";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 import prisma from "@/lib/prisma";
 
 const signupSchema = z.object({
@@ -42,12 +42,9 @@ export async function POST(req: NextRequest){
             return NextResponse.json({error: "User already exists."}, {status: 400})
         };
 
-        const hashedPassword = await argon2.hash(password,{
-            type: argon2.argon2id,
-            memoryCost: 2 ** 16,
-            timeCost: 5,
-            parallelism: 1,
-        });
+        const saltRounds = 10;
+
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         const user = await prisma.user.create({
             data: {
