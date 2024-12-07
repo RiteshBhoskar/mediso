@@ -6,10 +6,9 @@ import { authOptions } from "@/lib/auth";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
-
   if(session?.user){
-    const destination = session.user.role === "PATIENT" ? "dashboard/patient" : "dashboard/doctor"
-    redirect(destination)
+    const destination = session.user.role === "PATIENT" ? "/dashboard/patient" : "/dashboard/doctor"
+      redirect(destination);
   }
 
   return (
