@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import IntroductionPage from "@/components/LandingPage";
 import { authOptions } from "@/lib/auth"
 import { getServerSession } from "next-auth"
@@ -5,8 +6,13 @@ import { redirect } from "next/navigation";
 
 
 const getUserDetails = async () => {
-  const  session = await getServerSession(authOptions);
-  return session;
+    try{
+      const  session = await getServerSession(authOptions);
+      return session;
+    } catch(error) {
+      console.error("Error fetching session", error);
+      return null;
+    }
 }
 
 export default async function Home() {
