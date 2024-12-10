@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body>
+      <body className="w-full">
         <Providers>
         <Toaster position="bottom-right" richColors/>
         {children}

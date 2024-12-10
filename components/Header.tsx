@@ -8,7 +8,7 @@ export default function ResponsiveHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="px-4 lg:px-6 h-20 flex items-center border-b justify-between relative">
+    <header className="px-4 lg:px-6 w-auto h-20 flex items-center border-b justify-between relative lg:text-2xl">
       <Link className="flex items-center ml-2 justify-center" href="/">
         <svg
           width="30"
@@ -42,7 +42,7 @@ export default function ResponsiveHeader() {
       </button>
 
       <nav
-        className={`absolute sm:static top-20 w-full sm:w-auto sm:flex sm:items-center sm:gap-2 bg-white sm:bg-transparent transition-all duration-300 ${
+        className={`absolute sm:static top-20 w-full sm:w-auto sm:flex sm:justify-center sm:items-center sm:gap-2 bg-white sm:bg-transparent transition-all duration-300 ${
           menuOpen ? "block" : "hidden"
         }`}
       >

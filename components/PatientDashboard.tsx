@@ -104,7 +104,7 @@ export default function DashboardData() {
                 <div className="p-3 rounded-full bg-green-100 text-green-600">
                   <Users className="h-6 w-6" />
                 </div>
-                <CardTitle className="text-lg font-medium">View Other Patients' Concerns</CardTitle>
+                <CardTitle className="text-lg font-medium">View Other Patients's  Concerns</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">

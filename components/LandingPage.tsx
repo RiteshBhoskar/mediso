@@ -5,7 +5,7 @@ import HowItWorks from "./HowItWorks"
 import Features from "./Features"
 import GetStarted from "./GetStarted"
 
-export default function IntroductionPage() {
+export default function LandingPage() { 
   return (
     <div className="flex flex-col font-satoshi min-h-screen bg-white font-body">
       <Header />

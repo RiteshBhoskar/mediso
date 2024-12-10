@@ -7,8 +7,8 @@ import Link from "next/link";
 export default function HeroSection () {
     return (
         <div className="h-auto w-full sm:flex justify-between">
-            <div className="w-full">
-                <div className="pt-16 pl-10 space-y-6 h-full">
+            <div className="w-full lg:pl-16">
+                <div className="pt-20 pl-10 space-y-6 h-auto">
                 <div className="flex items-center w-fit space-x-2">
                     <Star className="w-5 h-5 text-[#1C274C] fill-current" />
                     <span className="text-gray-600 text-xl w-fit">4.7 | 3,460 Reviews</span>
@@ -40,7 +40,7 @@ export default function HeroSection () {
             </div>
 
 
-            <div className="w-full relative pt-5 sm:pt-0">
+            <div className="w-full relative pt-5 sm:pt-0 lg:pl-16">
                 <div className="w-auto hidden sm:block absolute mt-64">
                     <Card className="z-50 rounded-3xl">
                         <CardHeader className="text-[0.95rem] -m-2 -mt-4  font-mid flex justify-center">
