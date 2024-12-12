@@ -23,7 +23,7 @@ interface Concern {
 }
 
 
-const ConcernCard: React.FC<Concern & { userId: number }> = ({
+const ConcernCard: React.FC<Concern> = ({
   id,
   title,
   description,
@@ -33,7 +33,6 @@ const ConcernCard: React.FC<Concern & { userId: number }> = ({
   upVotes,
   downVotes,
   voteType,
-  userId,
 }) => {
   const [isUpvoteLoading, setIsUpvoteLoading] = useState(false);
   const [isDownvoteLoading, setIsDownvoteLoading] = useState(false);
@@ -52,7 +51,7 @@ const ConcernCard: React.FC<Concern & { userId: number }> = ({
         headers: {
           'Content-Type' : "application/json"
         },
-        body: JSON.stringify({concernId : id ,  voteType: newVoteType , userId}),
+        body: JSON.stringify({concernId : id ,  voteType: newVoteType}),
       });
 
       if (response.ok) {
@@ -63,13 +62,16 @@ const ConcernCard: React.FC<Concern & { userId: number }> = ({
         setCurrentVoteType(newVoteType === currentVoteType ? null : newVoteType);
         toast.success(`Vote updated successfully`);
       } else {
+        toast.dismiss(voteLoadingToastId);
         toast.error(`Error updating vote`);
       }
     } catch (error) {
+      toast.dismiss(voteLoadingToastId);
       toast.error(`Error updating vote`);
     } finally {
       setIsUpvoteLoading(false);
       setIsDownvoteLoading(false);
+      toast.dismiss(voteLoadingToastId);
     }
   };
 
@@ -131,8 +133,6 @@ const ConcernsPage = () => {
 
   const  { data: session , status} = useSession();
 
-  const userId =  session?.user.id;
-
   useEffect(() => {
     if (status === "authenticated") {
     const fetchConcerns = async () => {
@@ -184,7 +184,7 @@ const ConcernsPage = () => {
   return (
     <div className="grid justify-center space-y-5">
       {(concerns.map((concern) => (
-        <ConcernCard userId={userId!} key={concern.id} {...concern} />
+        <ConcernCard key={concern.id} {...concern} />
       )))}
     </div>
   );
