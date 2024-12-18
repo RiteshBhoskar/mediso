@@ -7,19 +7,23 @@ import { toast } from "sonner";
 import LoadingSpinner from "./LoadingSpinner";
 import { format } from "date-fns";
 import { User } from "lucide-react";
+import { Button } from "./ui/button";
+import { AppointmentStatus } from "@prisma/client";
 
 interface Appointment {
+    id: number;
     appointmentDate: string;
     startTime: string;
     endTime : string;
     concernTitle : string;
     doctorName: string;
+    status: string;
 }
 
 export default function AppointmentCard () {
     const { data: session , status } = useSession();
     const [ appointments , setAppointments ] = useState<Appointment[]>([]);
-    const [ loading , setLoading ] = useState<boolean>(true)
+    const [ loading , setLoading ] = useState<boolean>(true);
     const router = useRouter();
 
     if(!session || session.user.role !== "PATIENT" || status !== "authenticated") {
@@ -67,6 +71,20 @@ export default function AppointmentCard () {
         return <LoadingSpinner />
     }
 
+    const appointmentStatusHandler = (async (appointmentId: number , status: string) => {
+        try {
+            const response = await fetch("api/appointments/patients/status", {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ appointmentId , status }),
+            });
+        } catch (error) {
+            console.log(error)
+        }
+    });
+
     return (
         <div className="space-y-6">
     {appointments.length === 0 ? (
@@ -74,9 +92,9 @@ export default function AppointmentCard () {
             No appointments found.
         </div>
     ) : (
-        appointments.map((appointment, index) => (
+        appointments.map((appointment) => (
             <div
-                key={index}
+                key={appointment.id}
                 className="w-[420px] bg-white shadow-xl rounded-2xl overflow-hidden border border-gray-200 mb-6 transition-transform transform hover:scale-105"
             >
                 <div className="p-5 flex items-center space-x-4 bg-gradient-to-r from-teal-400 via-cyan-500 to-blue-600 text-white">
@@ -99,6 +117,18 @@ export default function AppointmentCard () {
                     <p className="text-lg font-medium text-gray-800">
                         {format(new Date(appointment.startTime), 'h:mm a')} - {format(new Date(appointment.endTime), 'h:mm a')}
                     </p>
+                </div>
+                <div className="p-4 flex justify-between">
+                {appointment.status === "PENDING" ? (
+                    <>
+                    <Button onClick={() => appointmentStatusHandler(appointment.id, AppointmentStatus.DECLINED)} variant="outline">Decline</Button>
+                    <Button onClick={() => appointmentStatusHandler(appointment.id , AppointmentStatus.CONFIRMED)} variant="ringHover" className="bg-slate-500">Accept</Button>
+                    </>
+                ) : (            
+                    <div className="text-gray-600 text-sm font-medium">
+                        Appointment {appointment.status.toLowerCase()}.
+                    </div>
+                )}
                 </div>
             </div>
         ))

@@ -209,11 +209,11 @@ export default function SignupForm() {
         />
         <Label htmlFor="terms" className="text-sm">
           I agree to the{" "}
-          <Link href="/terms" className="underline inline-flex items-center">
+          <Link href="#" className="underline inline-flex items-center">
             Terms of Service <ExternalLink className="w-3 h-3 ml-1" />
           </Link>{" "}
           and{" "}
-          <Link href="/policy"className="underline inline-flex items-center">
+          <Link href="#"className="underline inline-flex items-center">
             Privacy Policy <ExternalLink className="w-3 h-3 ml-1" />
           </Link>
         </Label>

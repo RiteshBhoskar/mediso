@@ -37,19 +37,20 @@ model Patient {
 }
 
 model Appointment {
-  id              Int      @id @default(autoincrement())
-  doctor          Doctor   @relation(fields: [doctorId], references: [id])
+  id              Int               @id @default(autoincrement())
+  doctor          Doctor            @relation(fields: [doctorId], references: [id])
   doctorId        Int
-  patient         Patient  @relation(fields: [patientId], references: [id])
+  patient         Patient           @relation(fields: [patientId], references: [id])
   patientId       Int
   doctorName      String
   concernId       Int
-  concern         Concerns @relation(fields: [concernId], references: [id])
+  concern         Concerns          @relation(fields: [concernId], references: [id])
   concernTitle    String
   appointmentDate DateTime
+  status          AppointmentStatus @default(PENDING)
   startTime       DateTime
   endTime         DateTime
-  createdAt       DateTime @default(now())
+  createdAt       DateTime          @default(now())
 }
 
 model Concerns {
@@ -86,6 +87,13 @@ enum Role {
 enum VoteType {
   UPVOTE
   DOWNVOTE
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  DECLINED
+  COMPLETED
 }
 
 enum Speciality {
