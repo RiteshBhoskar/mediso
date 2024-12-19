@@ -72,16 +72,25 @@ export default function AppointmentCard () {
     }
 
     const appointmentStatusHandler = (async (appointmentId: number , status: string) => {
+        const loadingTaostId = toast.loading("Updating appointment status...");
         try {
-            const response = await fetch("api/appointments/patients/status", {
+            const response = await fetch("/api/appointments/patients/status", {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ appointmentId , status }),
             });
+
+            if(response.ok){
+                const { updatedAppointment } = await response.json();
+                setAppointments((prevAppointments) => prevAppointments.map((appointment) => appointment.id === updatedAppointment.id ? { ...appointment , status: updatedAppointment.status} : appointment ) )
+            }
+            toast.dismiss(loadingTaostId);
+            toast.success("Appointment status updated successfully.")
         } catch (error) {
-            console.log(error)
+            toast.dismiss(loadingTaostId);
+            toast.error("An error occured while updating appointment status.")
         }
     });
 
