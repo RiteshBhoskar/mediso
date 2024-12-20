@@ -99,7 +99,7 @@ export default  function ConcernCardDoctor(){
 
             try {
                 setIsProcessing(true);
-                const response = await fetch("/api/appointments" , {
+                const response = await fetch("/api/appointments/doctors/send-appointments" , {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"

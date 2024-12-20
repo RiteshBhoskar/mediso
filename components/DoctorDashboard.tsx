@@ -84,7 +84,7 @@ export default function DoctorsDashboard() {
           </Select>
         </div>
       </div>
-      <div className="flex items-center my-4">
+      <div className="py-6 grid gap-4 md:grid-cols-2">
       <Link href="/dashboard/doctor/concerns">
         <Card className="hover:shadow-lg transition-shadow duration-300">
           <CardHeader className="flex items-center gap-3">
@@ -109,6 +109,21 @@ export default function DoctorsDashboard() {
           <CardContent>
             <p className="text-sm text-muted-foreground">
               Review health concerns shared by patients and provide guidance.
+            </p>
+          </CardContent>
+        </Card>
+      </Link>
+      <Link href="/dashboard/doctor/appointments">
+        <Card className="hover:shadow-lg transition-shadow duration-300">
+          <CardHeader className="flex items-center gap-3">
+            <div className="p-3 rounded-full bg-green-300 text-white">
+            <Calendar className="h-6 w-6" />
+            </div>
+            <CardTitle className="text-lg font-medium">Check your Appointments</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm  text-muted-foreground">
+              View and manage your appointments for today or upcoming days.
             </p>
           </CardContent>
         </Card>
