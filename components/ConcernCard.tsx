@@ -58,10 +58,12 @@ const ConcernCard: React.FC<Concern> = ({
       });
 
       if (response.ok) {
-        const { upVotes, downVotes } = await response.json();
+        const { upVotes, downVotes , isUpVoted, isDownVoted } = await response.json();
         toast.dismiss(voteLoadingToastId);
         setCurrentUpVotes(upVotes);
         setCurrentDownVotes(downVotes);
+        setIsCurrentUpvoted(isUpVoted);
+        setIsCurrentDownvoted(isDownVoted)
         toast.success(`Vote updated successfully`);
       } else {
         toast.dismiss(voteLoadingToastId);

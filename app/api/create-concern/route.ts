@@ -71,7 +71,7 @@ export async function POST(req: NextRequest){
     return NextResponse.json({ success: true ,  message : "Concern Created Successfully."}, { status: 201});
 
   }catch (error){
-    console.log(error);
+    console.error(error);
     return NextResponse.json({ error: error } , { status: 500 })
   }
 }

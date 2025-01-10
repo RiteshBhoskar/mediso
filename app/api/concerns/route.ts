@@ -68,10 +68,10 @@ export async function GET (req: NextRequest){
 
             return NextResponse.json({ concerns: doctorConcerns }, { status: 201 });
         }
-        console.log(formattedConcerns)
+        
         return NextResponse.json({ concerns: formattedConcerns }, { status : 201});
     }catch (error) {
-        console.log("Error fetching concerns", error);
+        console.error("Error fetching concerns", error);
         return NextResponse.json({ error : "An unknown error occurred." }, { status: 500 });
     }
 }

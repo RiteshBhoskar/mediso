@@ -46,16 +46,27 @@ export async function PATCH(req: NextRequest) {
       },
     });
 
+    let isUpVoted = false
+    let isDownVoted = false
+
     await prisma.$transaction(async (tx) => {
       if (existingVote) {
         if (existingVote.type === voteType) {
           await tx.concerns.update({
             where: { id: concernId },
             data: {
-              upVotes: voteType === VoteType.UPVOTE ? { increment: 1 } : undefined,
-              downVotes: voteType === VoteType.DOWNVOTE ? { increment: 1 } : undefined,
+              upVotes: voteType === VoteType.UPVOTE ? { decrement: 1 } : undefined,
+              downVotes: voteType === VoteType.DOWNVOTE ? { decrement: 1 } : undefined,
             },
           });
+          await tx.vote.delete({
+            where: {
+              userId_concernId: {
+                userId: session.user.id,
+                concernId
+              }
+            }
+          })
         } else {
           await tx.concerns.update({
             where: { id: concernId },
@@ -66,10 +77,11 @@ export async function PATCH(req: NextRequest) {
           });
 
           await tx.vote.update({
-            where: { userId_concernId: { userId: session.user.
-              id, concernId } },
+            where: { userId_concernId: { userId: session.user.id, concernId } },
             data: { type: voteType },
           });
+          isUpVoted = voteType === VoteType.UPVOTE;
+          isDownVoted = voteType === VoteType.DOWNVOTE
         }
       } else {
         await tx.concerns.update({
@@ -83,6 +95,8 @@ export async function PATCH(req: NextRequest) {
         await tx.vote.create({
           data: { userId: session.user.id, concernId, type: voteType },
         });
+        isUpVoted = voteType === VoteType.UPVOTE;
+        isDownVoted = voteType === VoteType.DOWNVOTE
       }
     });
 
@@ -95,6 +109,8 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({
       upVotes: updatedConcern?.upVotes,
       downVotes: updatedConcern?.downVotes,
+      isUpVoted,
+      isDownVoted,
       message: "Vote updated successfully.",
     });
   } catch (error) {
