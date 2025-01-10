@@ -1,8 +1,19 @@
 export const dynamic = "force-dynamic";
+import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
+
 export async function GET (req: NextRequest){
+    const session = await getServerSession(authOptions);
+
+    if(!session){
+        return NextResponse.json({ error: "Unauthenticated User"} , { status: 401})
+    }
+
+    const userId = session.user.id;
+
     try {
         const { searchParams } = new URL(req.url);
         const userRole = searchParams.get("role");
@@ -11,14 +22,36 @@ export async function GET (req: NextRequest){
             orderBy: { createdAt: "desc"},
             include: {
                 user : { select: { name : true } },
-                vote : true,
+                _count: {
+                    select: {
+                        vote: true
+                    }
+                },
+                vote: {
+                    where: {
+                        userId: userId,
+                    }
+                }
             }
         });
 
         const formattedConcerns = concerns.map((concern)=> {
-            const upVotes = concern.vote.filter(v => v.type === "UPVOTE").length;
-            const downVotes = concern.vote.filter(v => v.type === "DOWNVOTE").length;
-            return { ...concern, upVotes, downVotes};
+            const upVotes = concern.vote.filter((v) => v.type === "UPVOTE").length;
+            const downVotes = concern.vote.filter((v) => v.type === "DOWNVOTE").length;
+            const isUpVoted = concern.vote.some((v) => v.type === "UPVOTE");
+            const isDownVoted = concern.vote.some((v) => v.type === "DOWNVOTE");
+            return {
+              id: concern.id,
+              title: concern.title,
+              description: concern.description,
+              speciality: concern.speciality,
+              createdAt: concern.createdAt,
+              patientName: concern.user.name,
+              upVotes: concern.upVotes || upVotes,
+              downVotes: concern.downVotes || downVotes,
+              isUpVoted,
+              isDownVoted
+            };
         });
 
         if( userRole === "doctor"){
@@ -29,13 +62,13 @@ export async function GET (req: NextRequest){
                     description: concern.description,
                     speciality: concern.speciality,
                     createdAt: concern.createdAt,
-                    patientName: concern.user.name
+                    patientName: concern.patientName
                 }
             })
 
             return NextResponse.json({ concerns: doctorConcerns }, { status: 201 });
         }
-
+        console.log(formattedConcerns)
         return NextResponse.json({ concerns: formattedConcerns }, { status : 201});
     }catch (error) {
         console.log("Error fetching concerns", error);

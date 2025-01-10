@@ -11,7 +11,7 @@ const VoteSchema = z.object({
   voteType: z.enum([VoteType.UPVOTE, VoteType.DOWNVOTE]),
 })
 
-export async function POST(req: NextRequest) {
+export async function PATCH(req: NextRequest) {
 
   const session = await getServerSession(authOptions);
 

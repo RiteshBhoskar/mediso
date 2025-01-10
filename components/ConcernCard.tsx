@@ -1,6 +1,5 @@
 "use client"
 
-import { SpinnerDotted } from "spinners-react";
 import React, { useEffect, useState } from 'react';
 import { FaUserCircle } from 'react-icons/fa';
 import { ArrowBigUp, ArrowBigDown } from 'lucide-react';
@@ -16,10 +15,11 @@ interface Concern {
   description: string;
   speciality: string;
   createdAt: Date;
-  user: { name: string };
+  patientName: string;
   upVotes: number;
   downVotes: number;
-  voteType: VoteType | null;
+  isUpVoted: boolean;
+  isDownVoted: boolean;
 }
 
 
@@ -29,16 +29,19 @@ const ConcernCard: React.FC<Concern> = ({
   description,
   speciality,
   createdAt,
-  user,
+  patientName,
   upVotes,
   downVotes,
-  voteType,
+  isUpVoted,
+  isDownVoted
 }) => {
   const [isUpvoteLoading, setIsUpvoteLoading] = useState(false);
   const [isDownvoteLoading, setIsDownvoteLoading] = useState(false);
   const [currentUpVotes, setCurrentUpVotes] = useState(upVotes);
   const [currentDownVotes, setCurrentDownVotes] = useState(downVotes);
-  const [currentVoteType, setCurrentVoteType] = useState<VoteType | null>(null);
+  const [isCurrentUpvoted , setIsCurrentUpvoted] = useState(isUpVoted);
+  const [isCurrentDownvoted , setIsCurrentDownvoted] = useState(isDownVoted);
+
 
 
   const handleVote = async (newVoteType: VoteType) => {
@@ -47,7 +50,7 @@ const ConcernCard: React.FC<Concern> = ({
     const voteLoadingToastId = toast.loading("Updating Vote...");
     try {
       const response = await fetch("/api/concerns/votes", {
-        method: 'POST',
+        method: 'PATCH',
         headers: {
           'Content-Type' : "application/json"
         },
@@ -59,7 +62,6 @@ const ConcernCard: React.FC<Concern> = ({
         toast.dismiss(voteLoadingToastId);
         setCurrentUpVotes(upVotes);
         setCurrentDownVotes(downVotes);
-        setCurrentVoteType(newVoteType === currentVoteType ? null : newVoteType);
         toast.success(`Vote updated successfully`);
       } else {
         toast.dismiss(voteLoadingToastId);
@@ -90,22 +92,17 @@ const ConcernCard: React.FC<Concern> = ({
             <button
               onClick={() => handleVote(VoteType.UPVOTE)}
               disabled={isUpvoteLoading}
-              className={`flex items-center gap-1 rounded-full text-lg ${currentVoteType === VoteType.UPVOTE ? 'text-green-500' : 'text-neutral-500 hover:text-green-500'}`}
+              className={`flex items-center gap-1 rounded-full text-lg ${isCurrentUpvoted ? 'text-green-500 fill-current' : 'text-neutral-500 hover:text-green-500'}`}
             >
-              <ArrowBigUp className={
-                `size-6 
-                ${voteType === VoteType.UPVOTE ? ' text-green-500' : ''}`}
-                style={{ fill: currentVoteType === VoteType.UPVOTE ? 'currentColor' : 'none' }} />
+              <ArrowBigUp   className={`size-6 ${isCurrentUpvoted ? 'text-green-500 fill-current' : 'text-neutral-500 hover:text-green-500'}`} />
               <span>{currentUpVotes}</span>
             </button>
             <button
               onClick={() => handleVote(VoteType.DOWNVOTE)}
               disabled={isDownvoteLoading}
-              className={`flex items-center gap-1 rounded-full text-lg ${currentVoteType === VoteType.DOWNVOTE ? 'text-red-500' : 'text-neutral-500 hover:text-red-500'}`}
+              className={`flex items-center gap-1 rounded-full text-lg ${isCurrentDownvoted ? 'text-red-500' : 'text-neutral-500 hover:text-red-500'}`}
             >
-              <ArrowBigDown 
-              className={`size-6 ${voteType === VoteType.DOWNVOTE ? 'text-red-500' : ''}`} 
-              style={{ fill: currentVoteType === VoteType.DOWNVOTE ? 'currentColor' : 'none' }} 
+              <ArrowBigDown className={`size-6 ${isCurrentDownvoted ? 'text-red-500 fill-current' : 'text-neutral-500 hover:text-red-500'}`}
                />
               <span>{currentDownVotes}</span>
             </button>
@@ -119,7 +116,7 @@ const ConcernCard: React.FC<Concern> = ({
       <div className="p-4 bg-gray-50 flex justify-between text-gray-500 text-xs font-medium border-t border-gray-100">
         <div className="flex items-center text-gray-600">
             <FaUserCircle className="mr-2" size={18} />
-            <span className="text-xs font-medium">{`Posted by ${user.name}`}</span>
+            <span className="text-xs font-medium">{`Posted by ${patientName}`}</span>
         </div>
         {`${formattedTime} · ${formattedDate}`}
       </div>
