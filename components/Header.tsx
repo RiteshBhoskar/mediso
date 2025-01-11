@@ -42,12 +42,12 @@ export default function ResponsiveHeader() {
       </button>
 
       <nav
-        className={`absolute sm:static top-20 w-full sm:w-auto sm:flex sm:items-center sm:gap-2 bg-white sm:bg-transparent transition-all duration-300 ${
+        className={`absolute sm:static top-20 w-full sm:w-auto sm:flex sm:items-center sm:gap-2 bg-white sm:bg-transparent transition-all duration-300 rounded-xl ${
           menuOpen ? "block" : "hidden"
         }`}
       >
         <Link
-          className="block text-black  font-satoshi font-medium px-4 py-2 sm:px-0"
+          className="block text-black font-satoshi font-medium px-4 py-2 sm:px-0"
           href="#how-it-works"
         >
           <Button variant="linkHover2" className="text-base">

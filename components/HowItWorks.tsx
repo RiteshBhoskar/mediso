@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export default function HowItWorks() {
     return (
-        <div className="w-fit bg-white pb-7 sm:py-10">
+        <div className="w-fit h-fit bg-white pb-7 sm:py-10">
           <div className="container px-4 md:px-6 w-full flex flex-col sm:flex-row justify-between">
             <div className="flex flex-col items-center justify-center sm:items-start w-full pt-20 h-screen">
             <div className="text-[#1C274C] rounded-full px-6 bg-[#ebebfb] w-fit font-medium font-satoshi text-lg py-2 ml-3">
