@@ -9,6 +9,7 @@ import { format } from "date-fns";
 import { User } from "lucide-react";
 import { Button } from "./ui/button";
 import { AppointmentStatus } from "@prisma/client";
+import ChatBox from "./Chatbox";
 
 interface Appointment {
     id: number;
@@ -24,6 +25,7 @@ export default function AppointmentCard () {
     const { data: session , status } = useSession();
     const [ appointments , setAppointments ] = useState<Appointment[]>([]);
     const [ loading , setLoading ] = useState<boolean>(true);
+    const [ chatBox, setChatBox ] = useState<boolean>(false);
     const router = useRouter();
 
     if(!session || session.user.role !== "PATIENT" || status !== "authenticated") {
@@ -138,6 +140,12 @@ export default function AppointmentCard () {
                         Appointment {appointment.status.toLowerCase()}.
                     </div>
                 )}
+                </div>
+                <div className="p-4 bg-gray-50 text-center text-slate-500 font-semibold">
+                <button onClick={() => setChatBox(true)}>
+                    Chat with the doctor
+                </button>
+                {chatBox && <ChatBox />}
                 </div>
             </div>
         ))
