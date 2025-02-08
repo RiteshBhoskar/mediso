@@ -9,7 +9,6 @@ import { format } from "date-fns";
 import { User } from "lucide-react";
 import { Button } from "./ui/button";
 import { AppointmentStatus } from "@prisma/client";
-import ChatBox from "./ChatPage";
 import Link from "next/link";
 
 interface Appointment {
@@ -141,7 +140,7 @@ export default function AppointmentCard () {
                     </div>
                 )}
                 </div>
-                <Link href={`/dashboard/chat`}>
+                <Link href={`/dashboard/chat?appointmentId=${appointment.id}`}>
                 <div className="p-4 bg-gray-50 text-center text-slate-500 font-semibold">
                     Chat with the doctor
                 </div>
