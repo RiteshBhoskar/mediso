@@ -14,7 +14,16 @@ export async function GET(req: NextRequest , { params } : { params: { appointmen
                 id: Number(appointmentId)
             },
             select: {
-                doctorName: true
+                doctorName: true,
+                patient: {
+                    select: {
+                        user: {
+                            select: {
+                                name: true
+                            }
+                        }
+                    }
+                }
             }
         })
 
@@ -22,7 +31,7 @@ export async function GET(req: NextRequest , { params } : { params: { appointmen
             return NextResponse.json({ message: "Appointment not found" , status: 404 });
         }
         
-        return NextResponse.json({ doctorName: appointment.doctorName }, { status: 200 });
+        return NextResponse.json({ doctorName: appointment.doctorName , patientName: appointment.patient.user.name }, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error: "Failed to fetch appointment." , status: 500 });
     }

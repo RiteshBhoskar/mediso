@@ -24,7 +24,8 @@ export default function ChatPage() {
  const [messages, setMessages] = useState<Message[]>([]);
  const [messageInput, setMessageInput] = useState<string>("");
  const [ws, setWs] = useState<WebSocket | null>(null);
- const [doctorName, setDoctorName] = useState<string | null>("");
+ const [doctorName, setDoctorName] = useState<string>("");
+ const [patientName, setPatientName] = useState<string>("");
  const [loadingDoctorName, setLoadingDoctorName] = useState<boolean>(true);
 
  const { data: session , status } = useSession();
@@ -46,6 +47,7 @@ export default function ChatPage() {
     }
     const data = await response.json();
     setDoctorName(data.doctorName);
+    setPatientName(data.patientName);
    } catch (error: any) {
     toast.error("Failed to load doctor's name.");
     console.error("Error fetching doctor's name:", error);
@@ -65,16 +67,28 @@ export default function ChatPage() {
 
   socket.onopen = () => {
    console.log("WebSocket connection opened");
-   socket.send(JSON.stringify({ type: "join", payload: { appointmentId } }));
+   socket.send(JSON.stringify({ type: "join", payload: { appointmentId , senderType: userType } }));
   };
 
   socket.onmessage = (event) => {
-   const receivedMessage = JSON.parse(event.data);
-   if (receivedMessage.type === "chat") {
-    setMessages((prev) => [...prev, { ...receivedMessage.payload, time: new Date().toLocaleTimeString() }]); // Include time here
-   }
-  };
-
+    console.log("WebSocket received event:", event);
+    console.log("event.data:", event.data);
+    try {
+        const receivedMessage = JSON.parse(event.data.toString());
+        console.log("Parsed receivedMessage:", receivedMessage);
+        if (receivedMessage.type === "chat") {
+            console.log("Chat message payload:", receivedMessage.payload);
+            setMessages((prev) => [...prev, {
+                content: receivedMessage.payload.message as string,
+                sender: receivedMessage.payload.sender as string,
+                time: new Date().toLocaleTimeString()
+            }]);
+        }
+    } catch (error) {
+        console.error("Error parsing message data:", error);
+        console.error("Event data was:", event.data);
+    }
+};
   socket.onclose = () => {
    console.log("WebSocket connection closed");
   };
@@ -95,7 +109,7 @@ export default function ChatPage() {
   if (!messageInput.trim() || !ws || !appointmentId) return;
   const newMessage: Message = { sender: userType, content: messageInput, time: new Date().toLocaleTimeString() };
   setMessages((prev) => [...prev, newMessage]);
-  ws.send(JSON.stringify({ type: "chat", payload: { appointmentId, message: messageInput, sender: userType } })); // Include sender
+  ws.send(JSON.stringify({ type: "chat", payload: { appointmentId, message: messageInput, sender: userType } })); 
   setMessageInput("");
  };
 
@@ -106,7 +120,7 @@ export default function ChatPage() {
 
  return (
   <div className="flex h-screen">
-   <div className="w-1/3 border-r border-gray-200 hidden md:block"> {/* Hide conversation list on smaller screens */}
+   <div className="w-1/3 border-r border-gray-200 hidden md:block">
     <div className="p-4">
      </div>
     <ScrollArea className="h-full">
@@ -116,9 +130,20 @@ export default function ChatPage() {
     </ScrollArea>
    </div>
    <div className="w-full md:w-2/3 flex flex-col">
-   <div className="border-b p-4">
-    <h2 className="text-lg font-semibold">{doctorName ? `Chat with Dr. ${doctorName}` : "Loading Doctor's Name..."}</h2>
-   </div>
+   <div className="border-b p-4 flex">
+      <Avatar className="h-12 w-12">
+                    <AvatarImage
+                      src={`/placeholder.svg?height=48&width=48&text=${doctorName.charAt(0)}`}
+                      alt={doctorName}
+                    />
+                    <AvatarFallback>{doctorName.charAt(0)}</AvatarFallback>
+      </Avatar>
+      {session?.user.role === "DOCTOR" ? (
+                <h2 className="text-lg  pl-3 font-semibold flex justify-center items-center ">{patientName ? patientName : "Loading Patient's Name..."}</h2>
+      ) : (
+        <h2 className="text-lg  pl-3 font-semibold flex justify-center items-center ">{doctorName ? `Dr. ${doctorName}` : "Loading Doctor's Name..."}</h2>
+      )}
+    </div>
    <div className="flex flex-col h-screen">
    <ScrollArea className="flex-1 p-4">
     {messages.map((msg, index) => (
