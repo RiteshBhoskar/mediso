@@ -119,7 +119,7 @@ export default function ChatPage() {
  }
 
  return (
-  <div className="flex h-screen">
+  <div className="flex h-2/3">
    <div className="w-1/3 border-r border-gray-200 hidden md:block">
     <div className="p-4">
      </div>
