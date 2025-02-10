@@ -1,4 +1,6 @@
 import { WebSocketServer, WebSocket } from "ws";
+import prisma from "./prisma";
+
 
 const wss = new WebSocketServer({ port: 8080 });
 
@@ -13,7 +15,7 @@ let allSockets: User[] = [];
 wss.on("connection", (socket) => {
     console.log("New client connected");
 
-    socket.on("message", (message) => {
+    socket.on("message", async (message) => {
         try {
             const parsedMessage = JSON.parse(message.toString());
             console.log("Received message:", parsedMessage);
@@ -25,12 +27,26 @@ wss.on("connection", (socket) => {
             }
 
             if (parsedMessage.type === "chat") {
-                const { appointmentId, message: messageContent, sender: messageSender } = parsedMessage.payload;
+                const { message: messageContent, sender: messageSender } = parsedMessage.payload;
 
                 const currentUser = allSockets.find((user) => user.socket === socket);
                 if (!currentUser) {
                     console.log("Warning: Sender user not found in allSockets.");
                     return;
+                }
+
+                try {
+                  await prisma.message.create({
+                    data: {
+                      appointmentId: parseInt(parsedMessage.payload.appointmentId),
+                      content: messageContent,
+                      sender: messageSender,
+                      isRead: false,
+                    }
+                  })
+                  console.log(`Message stored in database for appointment ${parsedMessage.payload.appointmentId} with isRead: false`);
+                } catch (error) {
+                  console.error("Error saving message to database:", error);
                 }
 
                 allSockets.forEach((user) => {
