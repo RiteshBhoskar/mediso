@@ -23,7 +23,8 @@ export async function GET(req: NextRequest , { params } : { params: { appointmen
                             }
                         }
                     }
-                }
+                },
+                concernTitle: true,
             }
         })
 
@@ -31,7 +32,7 @@ export async function GET(req: NextRequest , { params } : { params: { appointmen
             return NextResponse.json({ message: "Appointment not found" , status: 404 });
         }
         
-        return NextResponse.json({ doctorName: appointment.doctorName , patientName: appointment.patient.user.name }, { status: 200 });
+        return NextResponse.json({ doctorName: appointment.doctorName , patientName: appointment.patient.user.name , concernTitle: appointment.concernTitle}, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error: "Failed to fetch appointment." , status: 500 });
     }

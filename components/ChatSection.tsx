@@ -30,6 +30,7 @@ const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
     const [doctorName, setDoctorName] = useState<string>("");
     const [patientName, setPatientName] = useState<string>("");
     const [loadingDoctorName, setLoadingDoctorName] = useState<boolean>(true);
+    const [concernTitle , setConcernTitle] = useState<string>("");
     const { data: session , status } = useSession();
     const userType = session?.user.role;
     const scrollAreaRef = React.useRef<HTMLDivElement>(null);
@@ -71,8 +72,7 @@ const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
                 const namesData = await namesResponse.json();
                 setDoctorName(namesData.doctorName);
                 setPatientName(namesData.patientName);
-
-                console.log('Fetching message history for appointmentId:', appointmentId); // <---- ADD THIS LINE
+                setConcernTitle(namesData.concernTitle);
                 const historyResponse = await fetch(`/api/messages/history?appointmentId=${appointmentId}`);
                 if (!historyResponse.ok) {
                     throw new Error(`HTTP error! status: ${historyResponse.status}`);
@@ -87,7 +87,7 @@ const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
 
                 await markMessagesAsRead();
             } catch (error: any) {
-                toast.error("Failed to load names.");
+                toast.error("Failed to load names and messages history.");
                 console.error("Error fetching names:", error);
             } finally {
                 setLoadingDoctorName(false);
@@ -106,11 +106,10 @@ const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
             return;
         }
 
-        wsRef.current = new WebSocket("ws://localhost:8080");
+        wsRef.current = new WebSocket("wss://mediso.onrender.com/");
 
         wsRef.current.onopen = () => {
             console.log("WebSocket connection opened for appointment:", appointmentId);
-            toast.success("Connected to chat.");
             wsRef.current?.send(JSON.stringify({ type: "join", payload: { appointmentId, senderType: userType } }));
         };
 
@@ -118,12 +117,16 @@ const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
             try {
                 const receivedMessage = JSON.parse(event.data.toString());
                 if (receivedMessage.type === "chat") {
-                    setMessages((prev) => [...prev, {
+                     const newMessage: Message = {
                         content: receivedMessage.payload.message as string,
                         sender: receivedMessage.payload.sender as string,
                         time: new Date().toLocaleTimeString(),
                         createdAt: new Date().toISOString(),
-                    }]);
+                    }
+                    setMessages((prev) => [...prev, newMessage]);
+                    setTimeout(() => {
+                        scrollAreaRef.current?.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: 'smooth' });
+                    }, 50);
                 }
             } catch (error) {
                 console.error("Error parsing message data:", error);
@@ -144,6 +147,11 @@ const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
         };
     }, [appointmentId, userType, status]);
 
+    useEffect(() => {
+        if (scrollAreaRef.current) {
+            scrollAreaRef.current.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: 'smooth' });
+        }
+    }, [messages]);
 
     const sendMessage = () => {
         if (!messageInput.trim() || !wsRef.current || !appointmentId) return;
@@ -169,20 +177,24 @@ const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
                     />
                     <AvatarFallback>{doctorName.charAt(0)}</AvatarFallback>
                 </Avatar>
+                <div className="flex flex-col items-start">
                 {session?.user.role === "DOCTOR" ? (
                     <h2 className="text-lg pl-3 font-semibold flex justify-center items-center ">{patientName ? patientName : "Loading Patient's Name..."}</h2>
                 ) : (
                     <h2 className="text-lg pl-3 font-semibold flex justify-center items-center ">{doctorName ? `Dr. ${doctorName}` : "Loading Doctor's Name..."}</h2>
                 )}
+                <p className="pl-3 text-gray-500 text-sm">
+                    For: {concernTitle}
+                </p>
+                </div>
             </div>
             <div className="flex flex-col h-screen">
-                <ScrollArea className="flex-1 p-4">
+                <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
                     {messages.map((msg, index) => (
                         <div key={index} className={`flex ${msg.sender === userType ? "justify-end" : "justify-start"} mb-4`}>
                             <Card className={`max-w-[70%] ${msg.sender === userType ? "bg-blue-500 text-white" : "bg-gray-100"}`}>
                                 <CardContent className="p-3">
                                     <p>{msg.content}</p>
-                                    {msg.time && <p className="text-xs text-gray-400 mt-1">{msg.time}</p>}
                                 </CardContent>
                             </Card>
                         </div>

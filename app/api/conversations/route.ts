@@ -31,7 +31,10 @@ export async function GET() {
 
             conversations = await prisma.appointment.findMany({
                 where: {
-                    doctorId: doctor.id
+                    doctorId: doctor.id,
+                    messages: {
+                        some: {}
+                    }
                 },
                 orderBy: {
                     createdAt: "desc"
@@ -43,7 +46,8 @@ export async function GET() {
                         select: {
                             user: {
                                 select: {
-                                    name: true
+                                    name: true,
+                                    lastSeen: true,
                                 }
                             }
                         }
@@ -87,7 +91,10 @@ export async function GET() {
 
             conversations = await prisma.appointment.findMany({
                 where: {
-                    patientId: patient.id
+                    patientId: patient.id,
+                    messages: {
+                        some: {}
+                    }
                 },
                 orderBy: {
                     createdAt: "desc"
@@ -99,7 +106,8 @@ export async function GET() {
                         select: {
                             user: {
                                 select: {
-                                    name: true
+                                    name: true,
+                                    lastSeen: true,
                                 }
                             }
                         }
