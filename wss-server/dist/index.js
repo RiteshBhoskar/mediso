@@ -14,7 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ws_1 = require("ws");
 const prisma_1 = __importDefault(require("./prisma"));
-const wss = new ws_1.WebSocketServer({ port: 8080 });
+const port = parseInt(process.env.PORT || '8080', 10);
+console.log(`Starting WebSocket server on port ${port}`);
+const wss = new ws_1.WebSocketServer({ port: port });
 let allSockets = [];
 wss.on("connection", (socket) => {
     console.log("New client connected");
