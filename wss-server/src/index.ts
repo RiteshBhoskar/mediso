@@ -1,8 +1,10 @@
 import { WebSocketServer, WebSocket } from "ws";
 import prisma from "./prisma";
 
+const port = parseInt(process.env.PORT || '8080', 10);
+console.log(`Starting WebSocket server on port ${port}`);
 
-const wss = new WebSocketServer({ port: 8080 });
+const wss = new WebSocketServer({ port: port });
 
 interface User {
     socket: WebSocket;

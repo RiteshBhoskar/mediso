@@ -1,15 +1,14 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
     const session = await getServerSession(authOptions);
     const userRole = session?.user?.role;
     const userId = session?.user?.id;
-    const searchParams = new URLSearchParams(req.url);
-    const appointmentId = searchParams.get('appointmentId');
-
+    const appointmentId = req.nextUrl.searchParams.get('appointmentId');
+    
     if (!session || !userRole || !userId) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

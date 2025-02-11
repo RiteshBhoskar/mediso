@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { ChevronLeft } from "lucide-react";
 
 interface Conversation {
     id: number;
@@ -22,7 +23,7 @@ interface Conversation {
         isRead: boolean;
         sender: string;
     }>;
-    unReadCount?: number | 0;
+    unReadCount?: number;
 }
 
 interface ConversationsSidebarProps {
@@ -58,6 +59,9 @@ const ConversationsSidebar: React.FC<ConversationsSidebarProps> = () => {
     return (
         <div className="w-1/3 border-r border-gray-200 hidden md:block">
             <div className="flex justify-normal border-b border-gray-200">
+                <button className="flex w-fit justify-center items-center p-2 m-2 border rounded-full hover:bg-slate-300" onClick={() => {router.back()}}>
+                    <ChevronLeft />
+                </button>
                 <div className="flex justify-center items-center w-full p-4 text-xl font-satoshi">
                     Conversations
                 </div>

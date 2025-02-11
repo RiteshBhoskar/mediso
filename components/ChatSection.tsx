@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -16,6 +16,7 @@ interface Message {
     content: string;
     time?: string;
     isRead?: boolean;
+    createdAt: string;
 }
 
 interface ChatSectionProps {
@@ -25,38 +26,78 @@ interface ChatSectionProps {
 const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [messageInput, setMessageInput] = useState<string>("");
-    const [ws, setWs] = useState<WebSocket | null>(null);
+    const wsRef = useRef<WebSocket | null>(null);
     const [doctorName, setDoctorName] = useState<string>("");
     const [patientName, setPatientName] = useState<string>("");
     const [loadingDoctorName, setLoadingDoctorName] = useState<boolean>(true);
     const { data: session , status } = useSession();
     const userType = session?.user.role;
+    const scrollAreaRef = React.useRef<HTMLDivElement>(null);
+
+    const markMessagesAsRead = async () => {
+        if (!appointmentId) return;
+        try {
+            const response = await fetch("/api/messages/markAsRead", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ appointmentId }),
+            });
+
+            if (!response.ok) {
+                toast.error(`HTTP error! status: ${response.status}`);
+            } else {
+                console.log("Messages marked as read.");
+            }
+
+        } catch (error) {
+            console.error("Error marking messages as read:", error);
+        }
+    }
 
     useEffect(() => {
         if (!appointmentId) {
             setLoadingDoctorName(false); 
+            setMessages([]);
             return;
         }
 
-        const fetchDoctorAndPatientNames = async () => {
+        const fetchInitialData = async () => {
             setLoadingDoctorName(true);
             try {
-                const response = await fetch(`/api/appointments/${appointmentId}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                const namesResponse = await fetch(`/api/appointments/${appointmentId}`);
+                if (!namesResponse.ok) {
+                    throw new Error(`HTTP error! status: ${namesResponse.status}`);
                 }
-                const data = await response.json();
-                setDoctorName(data.doctorName);
-                setPatientName(data.patientName);
+                const namesData = await namesResponse.json();
+                setDoctorName(namesData.doctorName);
+                setPatientName(namesData.patientName);
+
+                console.log('Fetching message history for appointmentId:', appointmentId); // <---- ADD THIS LINE
+                const historyResponse = await fetch(`/api/messages/history?appointmentId=${appointmentId}`);
+                if (!historyResponse.ok) {
+                    throw new Error(`HTTP error! status: ${historyResponse.status}`);
+                }
+
+                const historyData = await historyResponse.json();   
+                if (historyData.messages) {
+                    setMessages(historyData.messages.sort((a: { createdAt: string | number | Date; }, b: { createdAt: string | number | Date; }) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()));
+                } else {
+                    setMessages([]);
+                }
+
+                await markMessagesAsRead();
             } catch (error: any) {
                 toast.error("Failed to load names.");
                 console.error("Error fetching names:", error);
             } finally {
                 setLoadingDoctorName(false);
+                setTimeout(() => {
+                    scrollAreaRef.current?.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: 'smooth' });
+                }, 100);
             }
         };
 
-        fetchDoctorAndPatientNames();
+        fetchInitialData();
     }, [appointmentId]);
 
     useEffect(() => {
@@ -65,49 +106,50 @@ const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
             return;
         }
 
-        const socket = new WebSocket("ws://localhost:8080");
+        wsRef.current = new WebSocket("ws://localhost:8080");
 
-        socket.onopen = () => {
+        wsRef.current.onopen = () => {
             console.log("WebSocket connection opened for appointment:", appointmentId);
             toast.success("Connected to chat.");
-            socket.send(JSON.stringify({ type: "join", payload: { appointmentId, senderType: userType } }));
+            wsRef.current?.send(JSON.stringify({ type: "join", payload: { appointmentId, senderType: userType } }));
         };
 
-        socket.onmessage = (event) => {
+        wsRef.current.onmessage = (event) => {
             try {
                 const receivedMessage = JSON.parse(event.data.toString());
                 if (receivedMessage.type === "chat") {
                     setMessages((prev) => [...prev, {
                         content: receivedMessage.payload.message as string,
                         sender: receivedMessage.payload.sender as string,
-                        time: new Date().toLocaleTimeString()
+                        time: new Date().toLocaleTimeString(),
+                        createdAt: new Date().toISOString(),
                     }]);
                 }
             } catch (error) {
                 console.error("Error parsing message data:", error);
             }
         };
-        socket.onclose = () => {
+        wsRef.current.onclose = () => {
             console.log("WebSocket connection closed for appointment:", appointmentId);
         };
-        socket.onerror = (error) => {
+        wsRef.current.onerror = (error) => {
             console.error("WebSocket error:", error);
         };
 
-        setWs(socket);
+
         return () => {
-            if (socket.readyState === WebSocket.OPEN) {
-                socket.close();
+            if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+                wsRef.current.close();
             }
         };
     }, [appointmentId, userType, status]);
 
 
     const sendMessage = () => {
-        if (!messageInput.trim() || !ws || !appointmentId) return;
-        const newMessage: Message = { sender: userType, content: messageInput, time: new Date().toLocaleTimeString() };
+        if (!messageInput.trim() || !wsRef.current || !appointmentId) return;
+        const newMessage: Message = { sender: userType, content: messageInput, time: new Date().toLocaleTimeString() , createdAt: new Date().toISOString() };
         setMessages((prev) => [...prev, newMessage]);
-        ws?.send(JSON.stringify({ type: "chat", payload: { appointmentId, message: messageInput, sender: userType } }));
+        wsRef.current.send(JSON.stringify({ type: "chat", payload: { appointmentId, message: messageInput, sender: userType } }));
         setMessageInput("");
     };
 

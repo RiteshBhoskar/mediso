@@ -8,7 +8,6 @@ export async function GET() {
     const session = await getServerSession(authOptions);
     const userRole = session?.user.role;
     const userId = session?.user.id
-    console.log(userId);
 
     if(!session || !userRole || !userId ) {
         return { status: 401, body: { message: "Unauthorized" } };
