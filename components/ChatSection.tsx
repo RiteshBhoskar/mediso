@@ -20,7 +20,7 @@ interface Message {
 }
 
 interface ChatSectionProps {
-    appointmentId: string | null;
+    appointmentId: string | null | undefined;
 }
 
 const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
@@ -29,11 +29,11 @@ const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
     const wsRef = useRef<WebSocket | null>(null);
     const [doctorName, setDoctorName] = useState<string>("");
     const [patientName, setPatientName] = useState<string>("");
-    const [loadingDoctorName, setLoadingDoctorName] = useState<boolean>(true);
+    const [loadingDoctorName, setLoadingDoctorName] = useState<boolean>(false);
+    const [loadingMessages, setLoadingMessages] = useState<boolean>(false);
     const [concernTitle , setConcernTitle] = useState<string>("");
     const { data: session , status } = useSession();
     const userType = session?.user.role;
-    const scrollAreaRef = React.useRef<HTMLDivElement>(null);
 
     const markMessagesAsRead = async () => {
         if (!appointmentId) return;
@@ -57,12 +57,19 @@ const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
 
     useEffect(() => {
         if (!appointmentId) {
-            setLoadingDoctorName(false); 
+            setLoadingDoctorName(false);
+            setLoadingMessages(false); 
             setMessages([]);
+            setDoctorName("");
+            setPatientName("");
+            setConcernTitle("");
             return;
         }
 
+        if(appointmentId){
+
         const fetchInitialData = async () => {
+            setLoadingMessages(true);
             setLoadingDoctorName(true);
             try {
                 const namesResponse = await fetch(`/api/appointments/${appointmentId}`);
@@ -91,13 +98,11 @@ const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
                 console.error("Error fetching names:", error);
             } finally {
                 setLoadingDoctorName(false);
-                setTimeout(() => {
-                    scrollAreaRef.current?.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: 'smooth' });
-                }, 100);
+                setLoadingMessages(false);
             }
         };
-
         fetchInitialData();
+    }
     }, [appointmentId]);
 
     useEffect(() => {
@@ -106,7 +111,7 @@ const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
             return;
         }
 
-        wsRef.current = new WebSocket("wss://mediso.onrender.com/");
+        wsRef.current = new WebSocket(process.env.NEXT_PUBLIC_WEBSOCKET_URL as string);
 
         wsRef.current.onopen = () => {
             console.log("WebSocket connection opened for appointment:", appointmentId);
@@ -124,9 +129,6 @@ const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
                         createdAt: new Date().toISOString(),
                     }
                     setMessages((prev) => [...prev, newMessage]);
-                    setTimeout(() => {
-                        scrollAreaRef.current?.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: 'smooth' });
-                    }, 50);
                 }
             } catch (error) {
                 console.error("Error parsing message data:", error);
@@ -137,6 +139,7 @@ const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
         };
         wsRef.current.onerror = (error) => {
             console.error("WebSocket error:", error);
+            toast.error("Failed to establish WebSocket connection.");
         };
 
 
@@ -147,12 +150,6 @@ const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
         };
     }, [appointmentId, userType, status]);
 
-    useEffect(() => {
-        if (scrollAreaRef.current) {
-            scrollAreaRef.current.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: 'smooth' });
-        }
-    }, [messages]);
-
     const sendMessage = () => {
         if (!messageInput.trim() || !wsRef.current || !appointmentId) return;
         const newMessage: Message = { sender: userType, content: messageInput, time: new Date().toLocaleTimeString() , createdAt: new Date().toISOString() };
@@ -162,13 +159,14 @@ const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
     };
 
     if (loadingDoctorName) {
-        return <div className="flex justify-center items-center pl-96">
+        return <div className="flex justify-center items-center w-full h-full">
             <LoadingSpinner />
         </div>
     }
 
     return (
         <div className="w-2/3 flex flex-col">
+            {appointmentId ? (
             <div className="border-b p-4 flex">
                 <Avatar className="h-12 w-12">
                     <AvatarImage
@@ -188,9 +186,22 @@ const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
                 </p>
                 </div>
             </div>
-            <div className="flex flex-col h-screen">
-                <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
-                    {messages.map((msg, index) => (
+                ) : null 
+            }
+            <div className="flex flex-col" style={{ height: '500px' }}>
+                <ScrollArea className="flex-1 p-4">
+                    {loadingMessages ? (
+                        <LoadingSpinner />
+                    ) : !appointmentId ? (
+                        <div className="flex justify-center items-center h-full text-gray-500">
+                            Select a conversation to view messages.
+                        </div>
+                    ) : messages.length === 0 ? (
+                        <div className="flex justify-center items-center h-full text-gray-500">
+                            No messages in this conversation yet.
+                        </div>
+                    ) : ( 
+                        messages.map((msg, index) => (
                         <div key={index} className={`flex ${msg.sender === userType ? "justify-end" : "justify-start"} mb-4`}>
                             <Card className={`max-w-[70%] ${msg.sender === userType ? "bg-blue-500 text-white" : "bg-gray-100"}`}>
                                 <CardContent className="p-3">
@@ -198,7 +209,8 @@ const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
                                 </CardContent>
                             </Card>
                         </div>
-                    ))}
+                    ))
+                    )}
                 </ScrollArea>
                 <div className="p-4 flex items-center space-x-2 bg-white border-t">
                     <Input className="flex-1" placeholder="Type a message..." value={messageInput} onChange={(e) => setMessageInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' ? sendMessage() : null} />

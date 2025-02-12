@@ -32,6 +32,7 @@ interface ConversationsSidebarProps {
 
 const ConversationsSidebar: React.FC<ConversationsSidebarProps> = () => {
     const [conversations, setConversations] = useState<Conversation[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
     const router = useRouter();
     const { data: session, status } = useSession();
     const userType = session?.user.role;
@@ -39,6 +40,7 @@ const ConversationsSidebar: React.FC<ConversationsSidebarProps> = () => {
     useEffect(() => {
         if (status === "authenticated" && userType) {
             const fetchConversations = async () => {
+                setLoading(true);
                 try {
                     const response = await fetch("/api/conversations");
                     if (!response.ok) {
@@ -51,6 +53,8 @@ const ConversationsSidebar: React.FC<ConversationsSidebarProps> = () => {
                 } catch (error) {
                     console.error("Error fetching conversations:", error);
                     toast.error("Failed to load conversations.");
+                } finally {
+                    setLoading(false);
                 }
             };
             fetchConversations();
@@ -87,7 +91,9 @@ const ConversationsSidebar: React.FC<ConversationsSidebarProps> = () => {
                 </div>
             </div>
             <ScrollArea className="h-full">
-                {conversations.length === 0 ? (
+                {loading ? (
+                    <div className="text-center text-gray-500 p-4">Loading conversations...</div>
+                ) :conversations.length === 0 ? (
                     <div className="text-center text-gray-500 p-4">No conversations yet.</div>
                 ) : (
                     conversations.map((conversation) => (

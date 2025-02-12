@@ -18,7 +18,7 @@ import {
   Cell,
 } from "recharts"
 
-import { Activity, Calendar, Droplet, Scale, Users, Utensils, Weight } from "lucide-react"
+import { Activity, Calendar, Droplet, MessageCircle, Scale, Users, Utensils, Weight } from "lucide-react"
 
 import {
   Card,
@@ -109,6 +109,22 @@ export default function DashboardData() {
               <CardContent>
                 <p className="text-sm text-muted-foreground">
                   Explore shared health concerns from other patients for insights.
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/dashboard/chat">
+            <Card className="hover:shadow-lg transition-shadow duration-300">
+              <CardHeader className="flex items-center gap-3">
+                <div className="p-3 rounded-full bg-green-100 text-green-600">
+                  <MessageCircle className="h-6 w-6" />
+                </div>
+                <CardTitle className="text-lg font-medium">Your Conversations</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Chat with your doctor and get quick responses to your queries.
                 </p>
               </CardContent>
             </Card>

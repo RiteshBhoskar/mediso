@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
-import { Calendar, Clock, Users, Activity, FileText, Bell } from "lucide-react"
+import { Calendar, Clock, Users, Activity, FileText, Bell, MessageCircle } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -128,6 +128,21 @@ export default function DoctorsDashboard() {
           </CardContent>
         </Card>
       </Link>
+      <Link href="/dashboard/chat">
+            <Card className="hover:shadow-lg transition-shadow duration-300">
+              <CardHeader className="flex items-center gap-3">
+                <div className="p-3 rounded-full bg-green-100 text-green-600">
+                  <MessageCircle className="h-6 w-6" />
+                </div>
+                <CardTitle className="text-lg font-medium">Your Conversations</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Chat with patients and colleagues in real-time.
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
     </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
