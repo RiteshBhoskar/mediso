@@ -28,7 +28,7 @@ export async function POST(req: NextRequest){
         } else if(userRole === "PATIENT"){
             senderTypeToMarkAsRead = "DOCTOR";
         } else {
-            return { status: 400, body: { message: "Invalid user role" } };
+            return NextResponse.json({ message: "Invalid user role" }, { status: 400 });
         }
 
         const updatedMessages = await prisma.message.updateMany({
