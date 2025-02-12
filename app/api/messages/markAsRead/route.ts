@@ -10,14 +10,14 @@ export async function POST(req: NextRequest){
     const userId = session?.user.id;
 
     if(!session || !userRole || !userId){
-        return { status: 401, body: { message: "Unauthorized" } };
+        return NextResponse.json({ message: "Unauthorized"}, { status: 401 })
     }
 
     try {
         const { appointmentId } = await req.json();
 
         if(!appointmentId){
-            return { status: 400, body: { message: "Missing appointmentId" } };
+            return NextResponse.json({ message: "Missing appointmentId" }, { status: 400 })
         }
 
         const appointmentIdInt = parseInt(appointmentId.toString());
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest){
 
     } catch(error) {
         console.error("Error marking messages as read:", error);
-        return { status: 500, body: { message: "Failed to mark messages as read" } };
+        return NextResponse.json({ message: "Failed to mark messages as read" }, { status: 500 });
     } finally {
         prisma.$disconnect();
     }
