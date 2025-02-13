@@ -110,7 +110,7 @@ const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
         if (status !== "authenticated" || !userType) {
             return;
         }
-
+        
         wsRef.current = new WebSocket(process.env.NEXT_PUBLIC_WEBSOCKET_URL as string);
 
         wsRef.current.onopen = () => {

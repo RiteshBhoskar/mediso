@@ -1,9 +1,18 @@
 import DoctorAppointments from "@/components/DoctorAppointments";
 import { Button } from "@/components/ui/button";
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 
-export default function (){
+export default async function (){
+    const session = await getServerSession(authOptions);
+
+        if(!session || session.user.role != "DOCTOR"){
+            redirect("/");
+        };
+    
     return (
         <>
         <div className="flex-col sm:flex">
