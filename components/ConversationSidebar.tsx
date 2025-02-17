@@ -81,7 +81,7 @@ const ConversationsSidebar: React.FC<ConversationsSidebarProps> = () => {
 
 
     return (
-        <div className="w-1/3 border-r border-gray-200 hidden md:block">
+        <div className="w-1/3 border-r border-gray-200 ">
             <div className="flex justify-normal border-b border-gray-200">
                         <button className="flex w-fit justify-center items-center p-2 m-2 border rounded-full hover:bg-slate-300" onClick={() => {userType === "DOCTOR" ? router.push('/dashboard/doctor') : router.push('/dashboard/patient')}}>
                     <ChevronLeft />

@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 export default function GetStarted() {
     return (
         <div className="bg-white w-full">
-            <div className="py-16 bg-[#8585fb] rounded-3xl my-7 mx-5 sm:mx-10 text-white">
+            <div className="py-16 bg-[#8585fb] rounded-3xl my-7 mx-5 sm:mx-10 flex justify-center text-white">
                 <div className="container px-4 md:px-6 flex flex-col items-center text-center">
                     <div className="space-y-4 max-w-2xl">
                         <div className="rounded-full text-[#1C274C] bg-[#ebebfb] px-6 py-2 w-fit mx-auto font-medium text-lg">

@@ -4,10 +4,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/
 
 export default function Features() {
     return (
-        <div  className="w-full py-7 bg-slate-50">
-          <div className="container px-4 md:px-6">
+        <div  className="w-full py-7 flex justify-center bg-slate-50">
+          <div className="container px-4 md:px-4">
             <div className="flex justify-center">
-            <div className="text-[#1C274C] rounded-full px-6 bg-[#ebebfb] w-fit font-medium font-satoshi text-lg py-2 ml-3">
+            <div className="text-[#1C274C] rounded-full px-6 bg-[#ebebfb] w-fit font-medium font-satoshi text-lg py-2">
                 Features
             </div>
             </div>

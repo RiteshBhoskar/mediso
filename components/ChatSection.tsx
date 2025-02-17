@@ -188,7 +188,7 @@ const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
             </div>
                 ) : null 
             }
-            <div className="flex flex-col" style={{ height: '500px' }}>
+            <div className="flex flex-col h-screen">
                 <ScrollArea className="flex-1 p-4">
                     {loadingMessages ? (
                         <LoadingSpinner />

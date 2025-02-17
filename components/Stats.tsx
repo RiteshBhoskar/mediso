@@ -2,7 +2,7 @@
 
 export default function Stats(){
     return (
-        <div className="bg-[#FAFAFA] w-full h-full sm:w-full sm:h-fit rounded-3xl flex flex-col sm:flex-row px-7 py-10">
+        <div className="bg-[#FAFAFA] w-full h-full sm:w-full sm:h-fit rounded-3xl flex flex-col sm:flex-row sm:justify-evenly px-7 py-10">
             <div className="flex-col pl-5">
                 <div className="text-[#1C274C] text-center text-7xl font-medium">
                     98%
