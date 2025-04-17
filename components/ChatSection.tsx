@@ -165,7 +165,7 @@ const ChatSection: React.FC<ChatSectionProps> = ({ appointmentId }) => {
     }
 
     return (
-        <div className="w-2/3 flex flex-col">
+        <div className="w-full sm:w-2/3 flex flex-col">
             {appointmentId ? (
             <div className="border-b p-4 flex">
                 <Avatar className="h-12 w-12">

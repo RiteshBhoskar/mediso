@@ -17,12 +17,12 @@ export default async function (){
     return (
         <>
         <div className="flex-col sm:flex">
-        <Button variant="outline"  className="w-fit h-full ml-4 mt-4 z-20">
+        <Button variant="outline"  className="w-fit h-full m-4 z-20">
            <Link href="/dashboard/doctor">
             Back
             </Link>
         </Button>
-            <div className="flex-col -mt-7">
+            <div className="flex-col sm:-mt-7">
             <h1 className="text-3xl mb-2 text-center justify-center items-center font-satoshi">Patients Concerns</h1>
              <div className="w-full justify-center items-center">
              <ConcernCardDoctor />

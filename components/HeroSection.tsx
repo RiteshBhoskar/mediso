@@ -1,13 +1,46 @@
+"use client"
 import { MoveUpRight, Search, Star } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import Link from "next/link";
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/dist/ScrollTrigger";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 
 export default function HeroSection () {
+    const containerRef = useRef(null);
+
+  useGSAP(() => {
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: containerRef.current,
+            toggleActions: "play reverse play reverse"
+        }
+    });
+
+    tl.set(".right-section", { opacity: 0, x: 100 })
+      .set(".left-section", { opacity: 0, x: -100 })
+      .to(".right-section", {
+        opacity: 1,
+        x: 0,
+        duration: 1,
+        ease: "power1.out",
+      }, "<")
+      .to(".left-section", {
+        opacity: 1,
+        x: 0,
+        duration: 1,
+        ease: "power1.out",
+      }, "<")
+  }, { scope: containerRef });
+
     return (
-        <div className="h-auto w-full sm:flex justify-between">
-            <div className="w-full">
+        <section ref={containerRef} className="h-auto w-full overflow-clip sm:flex justify-between">
+            <div className="w-full left-section opacity-0">
                 <div className="pt-16 pl-10 space-y-6 h-full">
                 <div className="flex items-center w-fit space-x-2">
                     <Star className="w-5 h-5 text-[#1C274C] fill-current" />
@@ -40,7 +73,7 @@ export default function HeroSection () {
             </div>
 
 
-            <div className="w-full relative pt-5 sm:pt-0">
+            <div className="w-full right-section opacity-0 relative pt-5 sm:pt-0">
                 <div className="w-auto hidden sm:block absolute mt-64">
                     <Card className="z-50 rounded-3xl">
                         <CardHeader className="text-[0.95rem] -m-2 -mt-4  font-mid flex justify-center">
@@ -90,6 +123,6 @@ export default function HeroSection () {
                   className="sm:h-[532px] px-20"
                    />
             </div>
-        </div>
+        </section>
     )
 }

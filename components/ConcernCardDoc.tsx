@@ -133,12 +133,12 @@ export default  function ConcernCardDoctor(){
             }
       };
 
-    return (<div className="grid justify-center pt-3 bg-white rounded-2xl overflow-hidden font-satoshi gap-4">
+    return (<div className="grid justify-center pt-3 px-3 bg-white rounded-2xl overflow-hidden font-satoshi gap-4">
         {concerns.length > 0 ? (
           concerns.map((concern) => (
             <div
               key={concern.id}
-              className="w-[420px] bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-200 mb-4 font-satoshi"
+              className="w-full sm:w-[420px] bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-200 mb-4 font-satoshi"
             >
               <div className="p-4 border-b flex justify-between border-gray-100">
                 <div className="grid">

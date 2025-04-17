@@ -42,7 +42,7 @@ export default function DashboardData() {
   const [timeRange, setTimeRange] = useState("7d")
 
   return (
-    <div className="p-6 space-y-6 bg-background text-foreground">
+    <div className="w-full p-6 space-y-6 bg-background text-foreground">
       <div className="flex justify-between items-center">
       <div className="flex-col">
       <h1 className="text-4xl font-satoshi  tracking-tight">Health Dashboard</h1>
@@ -55,7 +55,7 @@ export default function DashboardData() {
       </div>
       </div>
         <Select value={timeRange} onValueChange={setTimeRange}>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[140px]">
             <SelectValue placeholder="Select time range" />
           </SelectTrigger>
           <SelectContent>

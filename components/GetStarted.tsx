@@ -1,10 +1,34 @@
+"use client"
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(useGSAP)
 
 export default function GetStarted() {
+    const sectionRef  = useRef(null);
+      useGSAP(() => {
+        gsap.fromTo(".get-started", {
+          opacity: 0,
+          y: 100,
+        } , {
+          opacity: 1,
+          y: 0,
+          ease: "power1.out",
+          duration: 1,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 60%",
+            toggleActions: "play reverse play reverse"
+          }
+        })
+      })
+    
     return (
-        <div className="bg-white w-full">
-            <div className="py-16 bg-[#8585fb] rounded-3xl my-7 mx-5 sm:mx-10 flex justify-center text-white">
+        <div ref={sectionRef} className="bg-white overflow-clip w-full">
+            <div className="py-16 bg-[#8585fb] get-started rounded-3xl my-7 mx-5 sm:mx-10 flex justify-center text-white">
                 <div className="container px-4 md:px-6 flex flex-col items-center text-center">
                     <div className="space-y-4 max-w-2xl">
                         <div className="rounded-full text-[#1C274C] bg-[#ebebfb] px-6 py-2 w-fit mx-auto font-medium text-lg">

@@ -105,7 +105,7 @@ export default function AppointmentCard () {
         appointments.map((appointment) => (
             <div
                 key={appointment.id}
-                className="w-[420px] bg-white shadow-xl rounded-2xl overflow-hidden border border-gray-200 mb-6 transition-transform transform hover:scale-105"
+                className="w-full sm:w-[420px] bg-white shadow-xl rounded-2xl overflow-hidden border border-gray-200 mb-6 transition-transform transform hover:scale-105"
             >
                 <div className="p-5 flex items-center space-x-4 bg-gradient-to-r from-teal-400 via-cyan-500 to-blue-600 text-white">
                     <User className="h-7 w-7 text-white" />

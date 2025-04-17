@@ -27,7 +27,7 @@ const ChatPageContent = () => {
     }, [])
 
     return (
-        <div className="flex h-2/3 w-full">
+        <div className="flex h-full flex-col sm:flex-row w-full">
             <ConversationsSidebar />
             <ChatSection appointmentId={appointmentId} />
         </div>

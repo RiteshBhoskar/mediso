@@ -59,7 +59,7 @@ export default function DoctorsDashboard() {
   ]
 
   return (
-    <div className="p-8 bg-background text-foreground">
+    <div className="px-4 py-8 items-center bg-background text-foreground">
       <div className="flex justify-between items-center mb-8">
         <div className="flex-col">
         <h1 className="text-3xl font-regular">Doctor&apos;s Dashboard</h1>
@@ -188,7 +188,7 @@ export default function DoctorsDashboard() {
         </Card>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7 mt-6">
+      <div className="sm:grid gap-6 hidden md:grid-cols-2 lg:grid-cols-7 mt-6">
         <Card className="col-span-4">
           <CardHeader>
             <CardTitle>Today&apos;s Appointments</CardTitle>

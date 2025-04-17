@@ -81,7 +81,7 @@ export default function CreateConcern(){
 
   return (
     <div className="flex justify-center h-fit mx-3 mt-7 mb-24">
-    <Card className="w-[400px] h-fit">
+    <Card className="w-full sm:w-[400px] h-fit">
       <CardHeader>
         <CardTitle className="text-xl">Tell us your concern</CardTitle>
         <CardDescription>Write your concerns and a doctor will reach out to you soon.</CardDescription>

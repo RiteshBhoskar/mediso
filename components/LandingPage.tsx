@@ -7,12 +7,10 @@ import GetStarted from "./GetStarted"
 
 export default function IntroductionPage() {
   return (
-    <div className="flex flex-col font-satoshi min-h-screen bg-white font-body">
+    <div className="flex flex-col font-satoshi h-full scroll-smooth bg-white font-body">
       <Header />
       <main className="flex-1"> 
-        <section className="my-4">
           <HeroSection />
-        </section>
 
         <section className="p-7">
           <Stats/>

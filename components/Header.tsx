@@ -3,12 +3,31 @@ import { Search, Menu } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { useState } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(useGSAP);
 
 export default function ResponsiveHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
+  
+  useGSAP(() => {
+
+    const navTl = gsap.timeline();
+
+    navTl.set(".nav-container", {
+        y: -100
+    })
+    .to(".nav-container" ,{
+        opacity: 1,
+        y: 0,
+        ease: "power2.inOut",
+    })
+})
+
 
   return (
-    <header className="px-4 lg:px-6 h-20 flex items-center border-b justify-between relative">
+    <header className="px-4 lg:px-6 h-20 nav-container opacity-0 flex items-center border-b justify-between relative">
       <Link className="flex items-center ml-2 justify-center" href="/">
         <svg
           width="30"

@@ -1,14 +1,49 @@
-import { FileText, Users, MessageSquare, UserPlus, CheckCircle, Stethoscope, User } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "./ui/card";
+"use client"
+
+import { FileText, MessageSquare, UserPlus, CheckCircle, Stethoscope, User } from "lucide-react";
+import { Card, CardHeader, CardContent, CardDescription } from "./ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { useRef } from "react";
+import ScrollTrigger from "gsap/dist/ScrollTrigger";
 
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 export default function HowItWorks() {
+  const sectionRef = useRef(null);
+  useGSAP(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top 60%",
+        toggleActions: "play reverse play reverse",
+      },
+      defaults: {
+        ease: "power1.out",
+        duration: 1,
+      },
+    });
+  
+    tl.fromTo(
+      ".left-container",
+      { opacity: 0, x: -100 },
+      { opacity: 1, x: 0 },
+      0
+    ).fromTo(
+      ".right-container",
+      { opacity: 0, x: 200 },
+      { opacity: 1, x: 0 },
+      0 
+    );
+  });
+  
+
     return (
-        <div className="w-full h-fit bg-white pb-7 sm:py-10 flex justify-center">
-          <div className="container px-4 md:px-3 w-full flex flex-col sm:flex-row justify-between">
+        <section ref={sectionRef} className="w-full h-fit bg-white overflow-clip pb-7 sm:py-10 flex justify-center">
+          <div className="container left-container px-4 md:px-3 w-full flex flex-col sm:flex-row justify-between">
             <div className="flex flex-col items-center justify-center sm:items-start w-full pt-20 h-screen">
             <div className="text-[#1C274C] rounded-full px-6 bg-[#ebebfb] w-fit font-medium font-satoshi text-lg py-2 ml-3">
                 Our Vision
@@ -21,7 +56,7 @@ export default function HowItWorks() {
                     </Button>
             </div>
 
-            <Tabs defaultValue="patients" className="w-full max-w-3xl mx-auto sm:pr-5">
+            <Tabs defaultValue="patients" className="w-full right-container max-w-3xl mx-auto sm:pr-5">
               <TabsList className="grid w-full grid-cols-2 rounded-full h-auto ">
                 <TabsTrigger value="patients" className="font-heading  rounded-full  text-xl">For Patients</TabsTrigger>
                 <TabsTrigger value="doctors" className="font-heading text-lg rounded-full">For Doctors</TabsTrigger>
@@ -116,7 +151,7 @@ export default function HowItWorks() {
               </TabsContent>
             </Tabs>
           </div>
-        </div>
+        </section>
     )
 }
 
