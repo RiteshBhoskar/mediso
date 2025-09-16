@@ -1,0 +1,5 @@
+node_modules
+.next
+.vercelignore
+npm-debug.log
+.git

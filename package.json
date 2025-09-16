@@ -2,12 +2,16 @@
   "name": "mediso",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
+  "prisma":{
+    "seed" : "node prisma/seed.js"
+  }, 
+    "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "dev:docker": "npx prisma migrate dev && npx prisma db seed && npm run dev"
   },
   "dependencies": {
     "@cloudflare/workers-types": "^4.20250124.3",
