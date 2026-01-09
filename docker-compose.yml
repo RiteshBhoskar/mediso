@@ -7,17 +7,23 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - mediso_dev_db:/var/lib/postgresql/data
 
   mediso:
+    image: ghcr.io/riteshbhoskar/mediso:latest
     build:
       context: .
       dockerfile: Dockerfile
+    env_file:
+     - .env
     ports:
      - 3000:3000
     depends_on:
      - mediso_dev_db
 
   wss-server:
+    image: ghcr.io/riteshbhoskar/mediso-wss-server:latest
     build:
       context: ./wss-server
       dockerfile: Dockerfile
@@ -27,3 +33,6 @@ services:
      - 8080:8080
     depends_on:
      - mediso
+
+volumes:
+  mediso_dev_db:
