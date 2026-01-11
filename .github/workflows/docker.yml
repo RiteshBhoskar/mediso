@@ -31,7 +31,9 @@ jobs:
                 context: .
                 file: ./Dockerfile
                 push: true
-                tags: ghcr.io/riteshbhoskar/mediso:latest
+                tags: |
+                    ghcr.io/${{ github.repository_owner }}/mediso:latest
+                    ghcr.io/${{ github.repository_owner }}/mediso:${{ github.sha }}
 
             - name: Build & push WSS Server image
               uses: docker/build-push-action@v6
@@ -39,4 +41,6 @@ jobs:
                 context: ./wss-server
                 file: ./wss-server/Dockerfile
                 push: true
-                tags: ghcr.io/riteshbhoskar/mediso-wss-server:latest
+                tags: |
+                    ghcr.io/${{ github.repository_owner }}/mediso-wss-server:latest
+                    ghcr.io/${{ github.repository_owner }}/mediso-wss-server:${{ github.sha }}
