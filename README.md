@@ -1,5 +1,6 @@
 <h1 align="center">Mediso</h1>
 
+<img src="public/website-image.png" />
 
 ## A platform for patients to share health concerns, upvote issues, and connect with doctors for personalized support. Doctors review submissions and choose the issues that they can address and have successfully treated in the past, simplifying your healthcare journey without the need to juggle between multiple doctors.
 
@@ -29,6 +30,10 @@ npm install
 ```
 
 4. Rename or duplicate `env.example` to `.env`
+
+    - ```sh
+        cp .env.example .env
+        ```
 
     - Use `openssl rand -base64 32` to generate a key and add it under `NEXTAUTH_SECRET` in the `.env` file.
 
@@ -75,7 +80,42 @@ cd ..
 npm run dev
 ```
 
-#### Docker Setup
+### Docker Setup
 
-1. 
+1.  Clone The Repo
 
+```sh
+git clone https://github.com/RiteshBhoskar/mediso.git
+```
+
+2. Switch to project folder
+
+```sh
+cd mediso
+```
+
+3. Pull images
+
+```sh
+make pull
+```
+
+4. Rename or duplicate `env.example` to `.env`
+
+    - ```sh
+        cp .env.example .env
+        ```
+
+    - Use `openssl rand -base64 32` to generate a key and add it under `NEXTAUTH_SECRET` in the `.env` file.
+
+    - Use `openssl rand -base64 32` to generate a key and add it under `JWT_SECRET` in the `.env` file.
+
+
+
+4. Run docker compose
+
+```sh
+make up
+```
+
+Visit the website on localhost:3000
